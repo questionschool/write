@@ -249,6 +249,7 @@ function hydrate(data, meUid) {
   const geul = (data && data["글"]) || [];
   for (const r of geul) {
     if (!r.id) continue;
+    if (r["공개범위"] === "삭제") continue;
     const vis = visFromK(r["공개범위"]); const uid = String(r["uid"] || ""); const ts = Date.parse(r["날짜"]) || Date.now();
     if (String(r["유형"]) === "자유") {
       const pid = String(r.id); const payload = { pid, uid, pen: r["필명"], clubId: String(r["클럽"]), title: r["제목"] || "", text: r["내용"] || "", ts };
@@ -347,7 +348,6 @@ async function drawEntryCanvas(entry) {
     ctx.fillStyle = "#cdd4e8"; ctx.font = "700 23px 'Nanum Myeongjo',serif"; ctx.fillText("질문 " + pad(q.n) + " · 『나를 쓰는 시간』 · p." + q.p, PAD + 88, 92);
     ctx.fillStyle = "#8b96b6"; ctx.font = "400 20px 'Nanum Myeongjo',serif"; ctx.fillText("「" + q.t + "」 · 장예원", PAD + 88, 120);
   }
-  ctx.fillStyle = "#ed6a35"; ctx.fillRect(W / 2 - 32, 170, 64, 5);
   ctx.fillStyle = "#f3895c"; ctx.font = qFont; ctx.textAlign = "center"; let y = qTop;
   for (const ln of qLines) { ctx.fillText(ln, W / 2, y); y += qLH; }
   ctx.textAlign = "left";
@@ -404,7 +404,6 @@ async function drawQuestionCard(arg) {
   const qMaxW = S - (PAD + 28) * 2;
   ctx.font = qFont; const qLines = wrapLines(ctx, headline, qMaxW);
   const center = ((230) + (S - 240)) / 2, blockH = (qLines.length - 1) * qLH;
-  ctx.fillStyle = "#ed6a35"; ctx.fillRect(S / 2 - 32, center - blockH / 2 - 66, 64, 5);
   ctx.fillStyle = "#f3895c"; ctx.font = qFont; ctx.textAlign = "center";
   let y = center - blockH / 2 + 18;
   for (const ln of qLines) { ctx.fillText(ln, S / 2, y); y += qLH; }
@@ -428,7 +427,7 @@ async function drawDocCanvas(entry) {
   try { if (document.fonts) await document.fonts.ready; } catch (e) {}
   const free = !!entry.free; const q = free ? null : Q(entry.n);
   const W = 1240, PAD = 120, contentW = W - PAD * 2;
-  const qFont = "700 44px 'Nanum Myeongjo', serif", bFont = "400 34px 'Gowun Batang','Nanum Myeongjo', serif";
+  const qFont = "800 42px 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif", bFont = "400 34px 'Gowun Batang','Nanum Myeongjo', serif";
   const tmp = document.createElement("canvas").getContext("2d");
   tmp.font = qFont; const qLines = wrapLines(tmp, free ? (entry.title || "자유 기록") : q.q, contentW);
   tmp.font = bFont; const bLines = wrapLines(tmp, (entry.text || "").trim() || "(빈 글)", contentW);
@@ -618,7 +617,7 @@ const css = `
 .nss-qcard{margin-top:8px; padding:30px 26px; border:1px solid rgba(237,106,53,.5); border-radius:18px; background:linear-gradient(165deg, rgba(237,106,53,.20), rgba(237,106,53,.06)); box-shadow:0 10px 30px rgba(237,106,53,.12);}
 .nss-qmeta{display:flex; align-items:center; gap:10px; font-size:12px; color:var(--ink3); margin-bottom:16px; flex-wrap:wrap;}
 .nss-chip{padding:3px 10px; border-radius:99px; border:1px solid var(--line2); background:var(--paper2); color:var(--ink2);}
-.nss-bigq{font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:23px; line-height:1.55; letter-spacing:-.4px; color:#fdf6ea;}
+.nss-bigq{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif; font-weight:800; font-size:23px; line-height:1.5; letter-spacing:-.4px; color:#fdf6ea;}
 .nss-label{display:flex; align-items:center; gap:8px; margin:26px 0 11px; font-size:13px; letter-spacing:.05em; color:var(--ink2);}
 .nss-label .ln{flex:1; height:1px; background:var(--line);}
 .nss-label .cnt{font-size:11.5px; color:var(--ink3); letter-spacing:0;}
@@ -730,6 +729,7 @@ function App() {
   const [cmKeys, setCmKeys] = useState({}); const [thread, setThread] = useState({}); const [openT, setOpenT] = useState({}); const [cDraft, setCDraft] = useState({});
   const [roomLoading, setRoomLoading] = useState(false);
   const [feed, setFeed] = useState([]); const [feedLoading, setFeedLoading] = useState(false);
+  const [lib, setLib] = useState([]); const [libLoading, setLibLoading] = useState(false);
   const [exportText, setExportText] = useState(null); const [copied, setCopied] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false); const [adminPanel, setAdminPanel] = useState(false);
   const [freePosts, setFreePosts] = useState([]); const [freeLoading, setFreeLoading] = useState(false);
@@ -795,6 +795,33 @@ function App() {
     else { await gDel(eKey); await gDel(pubKey); }
     setMyAnswered((p) => { const s = new Set(p); s.add(n); return s; });
   }, [me]);
+
+  const deleteEntry = async (n) => {
+    if (!window.confirm("이 글을 삭제할까요? 화면에서 사라지며, 되돌리려면 운영자에게 문의해 주세요.")) return false;
+    await pDel(`mine:${pad(n)}`);
+    await gDel(`e:${me.clubId}:${pad(n)}:${me.uid}`); await gDel(`pub:${pad(n)}:${me.uid}`);
+    sheetPost("update", "글", { id: `${me.uid}-${pad(n)}`, "공개범위": "삭제" });
+    setMyAnswered((p) => { const s = new Set(p); s.delete(n); return s; });
+    return true;
+  };
+  const deleteFreePost = async (pid) => {
+    if (!window.confirm("이 자유 글을 삭제할까요? 화면에서 사라지며, 되돌리려면 운영자에게 문의해 주세요.")) return false;
+    await pDel(`freemine:${pid}`);
+    await gDel(`fe:${me.clubId}:${pid}`); await gDel(`fpub:${pid}`);
+    sheetPost("update", "글", { id: pid, "공개범위": "삭제" });
+    setFreePosts((p) => p.filter((x) => x.pid !== pid));
+    return true;
+  };
+
+  const loadLibrary = useCallback(async () => {
+    setLibLoading(true); await reloadSheet(me && me.uid);
+    const items = [];
+    for (const k of await pList("mine:")) { const n = parseInt(k.split(":")[1], 10); if (!n) continue; const e = await pGet(k); if (e && (e.text || "").trim()) { const q = Q(n); items.push({ type: "q", key: "q" + n, n, title: q ? q.q : "", sub: q ? (q.ch + "장 · p." + q.p) : "", text: e.text, ts: e.ts || 0, vis: e.vis || "club" }); } }
+    for (const k of await pList("freemine:")) { const pid = k.split(":")[1]; const e = await pGet(k); if (e && (e.text || "").trim()) items.push({ type: "free", key: "f" + pid, pid, title: e.title || "(제목 없음)", sub: "자유 글", text: e.text, ts: e.ts || 0, vis: e.vis || "club" }); }
+    items.sort((a, b) => (b.ts || 0) - (a.ts || 0));
+    setLib(items); setLibLoading(false);
+  }, [me]);
+  const goLibrary = async () => { setView("library"); window.scrollTo(0, 0); await loadLibrary(); };
 
   useEffect(() => {
     if (view !== "write" || !active || !me) return;
@@ -910,9 +937,12 @@ function App() {
     try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch { setExportText(text); }
   };
   const exportAllPDF = async () => {
-    const qs = QUESTIONS.filter((q) => myAnswered.has(q.n));
+    const rows = [];
+    for (const q of QUESTIONS) { if (!myAnswered.has(q.n)) continue; const e = await pGet(`mine:${pad(q.n)}`); if (e && e.text && e.text.trim()) rows.push({ ts: e.ts || 0, dl: { pen: me.pen, n: q.n, text: e.text, ts: e.ts } }); }
+    for (const k of await pList("freemine:")) { const pid = k.split(":")[1]; const e = await pGet(k); if (e && e.text && e.text.trim()) rows.push({ ts: e.ts || 0, dl: { free: true, title: e.title || "", text: e.text, ts: e.ts, pen: me.pen } }); }
+    rows.sort((a, b) => (b.ts || 0) - (a.ts || 0));
     const canvases = [];
-    for (const q of qs) { const e = await pGet(`mine:${pad(q.n)}`); if (e && e.text && e.text.trim()) canvases.push(await drawDocCanvas({ pen: me.pen, n: q.n, text: e.text, ts: e.ts })); }
+    for (const r of rows) canvases.push(await drawDocCanvas(r.dl));
     if (!canvases.length) return;
     const blob = canvasesToPdfBlob(canvases);
     const u = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = u; a.download = `나를쓰는노트_${me.pen}_전체.pdf`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 1500);
@@ -932,11 +962,17 @@ function App() {
     </div>
   );
 
+  const CopyBtn = ({ head, text, label }) => {
+    const [c, setC] = useState(false);
+    const copy = async () => { try { await navigator.clipboard.writeText((head ? "Q. " + head + "\n\n" : "") + (text || "")); setC(true); setTimeout(() => setC(false), 1500); } catch (e) {} };
+    return <button className="nss-btn nss-actbtn nss-tap" onClick={copy}><Copy size={13} /> {c ? "복사됨" : (label || "글 복사")}</button>;
+  };
+
   const actionsRow = (entry) => (
     <div className="nss-actions">
       <button className="nss-btn nss-actbtn nss-tap" onClick={() => saveImage(entry)}><Download size={13} /> 이미지</button>
       <button className="nss-btn nss-actbtn nss-tap" onClick={() => savePDF(entry)}><FileText size={13} /> PDF</button>
-      {canShare && <button className="nss-btn nss-actbtn nss-tap" onClick={() => shareImage(entry)}><Share2 size={13} /> 공유</button>}
+      <CopyBtn head={entry.free ? entry.title : (Q(entry.n) ? Q(entry.n).q : "")} text={entry.text} label="글 복사" />
     </div>
   );
 
@@ -1046,7 +1082,7 @@ function App() {
         <div className="nss-peerhead"><span className="nss-ava">{(pen || "?").slice(0, 1)}</span><span className="nss-peerpen">{pen}{isMe ? " (나)" : ""}</span>{isPub && <span className="nss-tag pub"><Globe size={10} /> 전체</span>}<span className="nss-peertime">{relTime(ts)}</span></div>
         <div className="nss-peertext">{text}</div>
         {canDownload && actionsRow(dlEntry)}
-        {isMe && <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}><button className="nss-btn nss-actbtn nss-tap" onClick={() => goWrite(active.n)}><PenLine size={13} /> 수정하기</button></div>}
+        {isMe && <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 8 }}><button className="nss-btn nss-actbtn nss-tap" onClick={() => goWrite(active.n)}><PenLine size={13} /> 수정하기</button><button className="nss-btn nss-actbtn nss-tap" onClick={async () => { if (await deleteEntry(active.n)) goHome(); }}><Trash2 size={13} /> 삭제하기</button></div>}
         {COMMENTS_ENABLED && (<>
         <div className="nss-tbar"><button className="nss-btn nss-tbtn nss-tap" onClick={() => toggleThread(uid)}><MessageCircle size={14} /> {isMe ? "댓글" : "친구의 글을 읽고 댓글 달기"} {cCount(uid) > 0 ? cCount(uid) : ""}<ChevronDown size={13} style={{ transform: openT[uid] ? "rotate(180deg)" : "none", transition: "transform .2s" }} /></button></div>
         {openT[uid] && (
@@ -1082,15 +1118,33 @@ function App() {
     );
   };
 
+  const renderLibCard = (it) => {
+    const isFree = it.type === "free";
+    const dl = isFree ? { free: true, title: it.title, text: it.text, ts: it.ts, pen: me.pen } : { pen: me.pen, n: it.n, text: it.text, ts: it.ts };
+    const V = VIS[it.vis] || VIS.club; const Ico = V.Icon;
+    return (
+      <div className="nss-libcard nss-fade" key={it.key}>
+        <div className="nss-libq">{it.title}</div>
+        <div className="nss-libsnip">{it.text}</div>
+        <div className="nss-actions">
+          <button className="nss-btn nss-actbtn nss-tap" onClick={() => saveImage(dl)}><Download size={13} /> 이미지 다운로드</button>
+          <button className="nss-btn nss-actbtn nss-tap" onClick={() => savePDF(dl)}><FileText size={13} /> PDF 다운로드</button>
+          <CopyBtn head={isFree ? it.title : (Q(it.n) ? Q(it.n).q : "")} text={it.text} label="내가 쓴 글 복사하기" />
+          <button className="nss-btn nss-actbtn nss-tap" onClick={async () => { const ok = isFree ? await deleteFreePost(it.pid) : await deleteEntry(it.n); if (ok) loadLibrary(); }}><Trash2 size={13} /> 삭제하기</button>
+        </div>
+        <div className="nss-libmeta"><span className="nss-chip">{isFree ? "자유 글" : it.sub}</span><span className="nss-tag"><Ico size={10} /> {V.label}</span><span>{it.ts ? relTime(it.ts) : ""}</span>{!isFree && <button className="nss-btn nss-tap" style={{ marginLeft: "auto", color: "var(--ink2)", fontSize: 12 }} onClick={() => goWrite(it.n)}>이어 쓰기 · 함께 읽기</button>}</div>
+      </div>
+    );
+  };
+
   const renderLibrary = () => {
-    const written = QUESTIONS.filter((q) => myAnswered.has(q.n));
     return (
       <div className="nss-fade">
         <button className="nss-btn nss-back" onClick={goHome}><ChevronLeft size={16} /> 처음으로</button>
-        <div className="nss-hero" style={{ paddingBottom: 4 }}><div className="nss-hk">{me.pen} · {me.clubName}</div><h1 className="nss-htitle" style={{ fontSize: 26 }}>지금까지 쓴 {written.length}편의 글</h1></div>
-        {written.length > 0 && <button className="nss-btn nss-cta nss-tap" style={{ margin: "6px 0 22px" }} onClick={exportAllPDF}><FileText size={16} /> 내 글 전체 PDF로 다운로드</button>}
-        {written.length === 0 ? <div className="nss-empty"><Feather size={26} style={{ opacity: .5 }} /><br /><br />아직 쓴 글이 없습니다.<br />질문 하나를 골라 첫 문장을 남겨 보세요.</div>
-          : written.map((q) => <LibItem key={q.n} q={q} pen={me.pen} onOpen={() => goWrite(q.n)} onImg={saveImage} onPdf={savePDF} />)}
+        <div className="nss-hero" style={{ paddingBottom: 4 }}><div className="nss-hk">{me.pen} · {me.clubName}</div><h1 className="nss-htitle" style={{ fontSize: 26 }}>지금까지 쓴 {lib.length}편의 글</h1></div>
+        {lib.length > 0 && <button className="nss-btn nss-cta nss-tap" style={{ margin: "6px 0 22px" }} onClick={exportAllPDF}><FileText size={16} /> 내 글 전체 PDF로 다운로드</button>}
+        {lib.length === 0 ? (libLoading ? <div className="nss-nopeer">불러오는 중…</div> : <div className="nss-empty"><Feather size={26} style={{ opacity: .5 }} /><br /><br />아직 쓴 글이 없습니다.<br />질문 하나를 골라 첫 문장을 남겨 보세요.</div>)
+          : lib.map(renderLibCard)}
       </div>
     );
   };
@@ -1106,6 +1160,7 @@ function App() {
         <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}><button className="nss-btn nss-actbtn nss-tap" onClick={() => saveQuestionImage({ free: true, title: p.title, pen: p.pen })}><Download size={13} /> 질문 카드 이미지 저장</button></div>
         <div className="nss-peertext">{p.text}</div>
         {canDownload && actionsRow(dl)}
+        {isMe && <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}><button className="nss-btn nss-actbtn nss-tap" onClick={() => deleteFreePost(p.pid)}><Trash2 size={13} /> 삭제하기</button></div>}
         {COMMENTS_ENABLED && (<>
         <div className="nss-tbar"><button className="nss-btn nss-tbtn nss-tap" onClick={() => toggleThreadF(p.pid)}><MessageCircle size={14} /> {isMe ? "댓글" : "친구의 글을 읽고 댓글 달기"} {cCount(p.pid) > 0 ? cCount(p.pid) : ""}<ChevronDown size={13} style={{ transform: openT[p.pid] ? "rotate(180deg)" : "none", transition: "transform .2s" }} /></button></div>
         {openT[p.pid] && (
@@ -1221,7 +1276,7 @@ function App() {
         <div className="nss-wrap">
           <div className="nss-top">
             <button className="nss-btn nss-brand" onClick={goHome}><span className="nss-seal">作</span><span style={{ textAlign: "left", minWidth: 0 }}><div className="nss-bt">{me.clubType === "secret" ? <Lock size={11} /> : <Users size={11} />} {me.clubName}{me.role === "admin" && <span className="nss-adtag">관리자</span>}</div><div className="nss-bn">나를 쓰는 시간</div></span></button>
-            <div className="nss-hright"><button className="nss-btn nss-navbtn nss-tap" onClick={() => { setPenInput(me.pen); setAdminPanel(false); setSettingsOpen(true); }} aria-label="설정"><Settings size={15} /></button><button className="nss-btn nss-navbtn nss-tap" onClick={() => { setView("library"); window.scrollTo(0, 0); }}><Library size={15} /> {answeredCount > 0 && <span style={{ color: "var(--seal2)", fontWeight: 700 }}>{answeredCount}</span>}</button></div>
+            <div className="nss-hright"><button className="nss-btn nss-navbtn nss-tap" onClick={() => { setPenInput(me.pen); setAdminPanel(false); setSettingsOpen(true); }} aria-label="설정"><Settings size={15} /></button><button className="nss-btn nss-navbtn nss-tap" onClick={goLibrary}><Library size={15} /> {answeredCount > 0 && <span style={{ color: "var(--seal2)", fontWeight: 700 }}>{answeredCount}</span>}</button></div>
           </div>
           {view === "home" && renderHome()}
           {view === "feed" && renderFeed()}
@@ -1232,7 +1287,7 @@ function App() {
           {view === "library" && renderLibrary()}
           <nav className="nss-bnav">
             <button className="nss-btn nss-bnavbtn nss-tap" onClick={pickRandom}><Shuffle className="ic" size={20} /> 오늘의 질문<br />노트 쓰기</button>
-            <button className="nss-btn nss-bnavbtn nss-tap" onClick={() => { setView("library"); window.scrollTo(0, 0); }}><Library className="ic" size={20} /> 나의 노트<br />모아보기</button>
+            <button className="nss-btn nss-bnavbtn nss-tap" onClick={goLibrary}><Library className="ic" size={20} /> 나의 노트<br />모아보기</button>
             <button className="nss-btn nss-bnavbtn nss-tap" onClick={goFeed}><Users className="ic" size={20} /> 친구들의 노트<br />함께 보기</button>
             <a className="nss-bnavbtn nss-tap" href="http://pf.kakao.com/_XGbin" target="_blank" rel="noopener noreferrer"><MessageCircle className="ic" size={20} /> 사이트 관리자<br />에게 문의하기</a>
           </nav>
@@ -1269,25 +1324,6 @@ function App() {
         )}
       </div>
     </>
-  );
-}
-
-function LibItem({ q, pen, onOpen, onImg, onPdf }) {
-  const [snip, setSnip] = useState(""); const [ts, setTs] = useState(null); const [vis, setVis] = useState("club"); const [cp, setCp] = useState(false);
-  useEffect(() => { (async () => { const e = await pGet(`mine:${pad(q.n)}`); if (e) { setSnip(e.text || ""); setTs(e.ts); setVis(e.vis || "club"); } })(); }, [q.n]);
-  const V = VIS[vis] || VIS.club; const Ico = V.Icon; const dl = { pen, n: q.n, text: snip, ts };
-  const copyText = async () => { try { await navigator.clipboard.writeText(`Q. ${q.q}\n\n${snip}`); setCp(true); setTimeout(() => setCp(false), 1500); } catch (e) {} };
-  return (
-    <div className="nss-libcard nss-fade">
-      <div className="nss-libq">{q.q}</div>
-      <div className="nss-libsnip">{snip}</div>
-      <div className="nss-actions">
-        <button className="nss-btn nss-actbtn nss-tap" onClick={() => onImg(dl)}><Download size={13} /> 이미지 다운로드</button>
-        <button className="nss-btn nss-actbtn nss-tap" onClick={() => onPdf(dl)}><FileText size={13} /> PDF 다운로드</button>
-        <button className="nss-btn nss-actbtn nss-tap" onClick={copyText}><Copy size={13} /> {cp ? "복사됨" : "내가 쓴 글 복사하기"}</button>
-      </div>
-      <div className="nss-libmeta"><span className="nss-chip">{q.ch}장 · p.{q.p}</span><span className="nss-tag"><Ico size={10} /> {V.label}</span><span>{ts ? relTime(ts) : ""}</span><button className="nss-btn nss-tap" style={{ marginLeft: "auto", color: "var(--ink2)", fontSize: 12 }} onClick={onOpen}>이어 쓰기 · 함께 읽기</button></div>
-    </div>
   );
 }
 
