@@ -481,6 +481,37 @@ function canvasToPdfBlob(canvas) {
   const total = new Uint8Array(len); let p = 0; for (const c of chunks) { total.set(c, p); p += c.length; }
   return new Blob([total], { type: "application/pdf" });
 }
+function canvasesToPdfBlob(canvases) {
+  const chunks = []; let len = 0; const offsets = {};
+  const push = (d) => { const b = typeof d === "string" ? strBytes(d) : d; chunks.push(b); len += b.length; };
+  const mark = (n) => { offsets[n] = len; };
+  push("%PDF-1.3\n");
+  const N = canvases.length; const pageNums = [], imgNums = [], contNums = []; let next = 3;
+  for (let i = 0; i < N; i++) { pageNums.push(next++); imgNums.push(next++); contNums.push(next++); }
+  mark(1); push("1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n");
+  mark(2); push(`2 0 obj\n<< /Type /Pages /Kids [${pageNums.map((n) => n + " 0 R").join(" ")}] /Count ${N} >>\nendobj\n`);
+  for (let i = 0; i < N; i++) {
+    const cv = canvases[i];
+    const dataUrl = cv.toDataURL("image/jpeg", 0.9);
+    const bin = atob(dataUrl.split(",")[1]);
+    const jpeg = new Uint8Array(bin.length); for (let j = 0; j < bin.length; j++) jpeg[j] = bin.charCodeAt(j);
+    const pxW = cv.width, pxH = cv.height;
+    const pageW = 595.28, pageH = +(pageW * pxH / pxW).toFixed(2);
+    const pn = pageNums[i], im = imgNums[i], cn = contNums[i];
+    mark(pn); push(`${pn} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageW} ${pageH}] /Resources << /XObject << /Im0 ${im} 0 R >> >> /Contents ${cn} 0 R >>\nendobj\n`);
+    mark(im); push(`${im} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${pxW} /Height ${pxH} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpeg.length} >>\nstream\n`);
+    push(jpeg); push("\nendstream\nendobj\n");
+    const content = `q ${pageW} 0 0 ${pageH} 0 0 cm /Im0 Do Q\n`;
+    mark(cn); push(`${cn} 0 obj\n<< /Length ${content.length} >>\nstream\n${content}endstream\nendobj\n`);
+  }
+  const xrefOffset = len; const maxObj = 2 + N * 3;
+  let xref = `xref\n0 ${maxObj + 1}\n0000000000 65535 f \n`;
+  for (let n = 1; n <= maxObj; n++) xref += String(offsets[n] || 0).padStart(10, "0") + " 00000 n \n";
+  push(xref);
+  push(`trailer\n<< /Size ${maxObj + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`);
+  const total = new Uint8Array(len); let p = 0; for (const c of chunks) { total.set(c, p); p += c.length; }
+  return new Blob([total], { type: "application/pdf" });
+}
 
 const css = `
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@500;700;800&display=swap');
@@ -873,6 +904,14 @@ function App() {
     const text = lines.join("\n");
     try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch { setExportText(text); }
   };
+  const exportAllPDF = async () => {
+    const qs = QUESTIONS.filter((q) => myAnswered.has(q.n));
+    const canvases = [];
+    for (const q of qs) { const e = await pGet(`mine:${pad(q.n)}`); if (e && e.text && e.text.trim()) canvases.push(await drawDocCanvas({ pen: me.pen, n: q.n, text: e.text, ts: e.ts })); }
+    if (!canvases.length) return;
+    const blob = canvasesToPdfBlob(canvases);
+    const u = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = u; a.download = `나를쓰는노트_${me.pen}_전체.pdf`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 1500);
+  };
 
   const BuyBanner = () => (
     <div className="nss-buy">
@@ -905,8 +944,8 @@ function App() {
         <p className="nss-hsub">질문을 고르고 나의 글을 먼저 씁니다. 클럽·전체로 공개하면 저자의 글과 친구들의 글이 함께 열리고, 각자의 글 아래에서 이야기를 나눕니다.</p>
         <div className="nss-prog"><div className="nss-pnum">{answeredCount}<small> / 100</small></div><div className="nss-pbar"><div className="nss-pfill" style={{ width: `${answeredCount}%` }} /></div></div>
         <div className="nss-pickrow">
-          <button className="nss-btn nss-cta nss-tap" onClick={goFreeWrite}><Feather size={16} /> 자유롭게 쓰기</button>
-          <button className="nss-btn nss-cta ghost nss-tap" onClick={pickRandom}><Shuffle size={16} /> 오늘의 질문 받기</button>
+          <button className="nss-btn nss-cta ghost nss-tap" onClick={goFreeWrite}><Feather size={16} /> 자유롭게 쓰기</button>
+          <button className="nss-btn nss-cta nss-tap" onClick={pickRandom}><Shuffle size={16} /> 오늘의 질문 받기</button>
           <button className="nss-btn nss-cta ghost nss-tap" onClick={() => { const el = document.getElementById("nss-ch"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}><BookOpen size={16} /> 직접 고르기</button>
           <button className="nss-btn nss-cta ghost nss-tap" onClick={goFeed}><Sparkles size={16} /> 나와 친구들이 답한 질문</button>
         </div>
@@ -1002,6 +1041,7 @@ function App() {
         <div className="nss-peerhead"><span className="nss-ava">{(pen || "?").slice(0, 1)}</span><span className="nss-peerpen">{pen}{isMe ? " (나)" : ""}</span>{isPub && <span className="nss-tag pub"><Globe size={10} /> 전체</span>}<span className="nss-peertime">{relTime(ts)}</span></div>
         <div className="nss-peertext">{text}</div>
         {canDownload && actionsRow(dlEntry)}
+        {isMe && <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}><button className="nss-btn nss-actbtn nss-tap" onClick={() => goWrite(active.n)}><PenLine size={13} /> 수정하기</button></div>}
         {COMMENTS_ENABLED && (<>
         <div className="nss-tbar"><button className="nss-btn nss-tbtn nss-tap" onClick={() => toggleThread(uid)}><MessageCircle size={14} /> {isMe ? "댓글" : "친구의 글을 읽고 댓글 달기"} {cCount(uid) > 0 ? cCount(uid) : ""}<ChevronDown size={13} style={{ transform: openT[uid] ? "rotate(180deg)" : "none", transition: "transform .2s" }} /></button></div>
         {openT[uid] && (
@@ -1043,9 +1083,9 @@ function App() {
       <div className="nss-fade">
         <button className="nss-btn nss-back" onClick={goHome}><ChevronLeft size={16} /> 처음으로</button>
         <div className="nss-hero" style={{ paddingBottom: 4 }}><div className="nss-hk">{me.pen} · {me.clubName}</div><h1 className="nss-htitle" style={{ fontSize: 26 }}>지금까지 쓴 {written.length}편의 글</h1></div>
-        {written.length > 0 && <button className="nss-btn nss-cta nss-tap" style={{ margin: "6px 0 22px" }} onClick={doExport}><Copy size={16} /> {copied ? "복사되었습니다" : "내 글 전체 복사하기"}</button>}
+        {written.length > 0 && <button className="nss-btn nss-cta nss-tap" style={{ margin: "6px 0 22px" }} onClick={exportAllPDF}><FileText size={16} /> 내 글 전체 PDF로 다운로드</button>}
         {written.length === 0 ? <div className="nss-empty"><Feather size={26} style={{ opacity: .5 }} /><br /><br />아직 쓴 글이 없습니다.<br />질문 하나를 골라 첫 문장을 남겨 보세요.</div>
-          : written.map((q) => <LibItem key={q.n} q={q} pen={me.pen} onOpen={() => goWrite(q.n)} onImg={saveImage} onPdf={savePDF} onShare={canShare ? shareImage : null} />)}
+          : written.map((q) => <LibItem key={q.n} q={q} pen={me.pen} onOpen={() => goWrite(q.n)} onImg={saveImage} onPdf={savePDF} />)}
       </div>
     );
   };
@@ -1227,18 +1267,19 @@ function App() {
   );
 }
 
-function LibItem({ q, pen, onOpen, onImg, onPdf, onShare }) {
-  const [snip, setSnip] = useState(""); const [ts, setTs] = useState(null); const [vis, setVis] = useState("club");
+function LibItem({ q, pen, onOpen, onImg, onPdf }) {
+  const [snip, setSnip] = useState(""); const [ts, setTs] = useState(null); const [vis, setVis] = useState("club"); const [cp, setCp] = useState(false);
   useEffect(() => { (async () => { const e = await pGet(`mine:${pad(q.n)}`); if (e) { setSnip(e.text || ""); setTs(e.ts); setVis(e.vis || "club"); } })(); }, [q.n]);
   const V = VIS[vis] || VIS.club; const Ico = V.Icon; const dl = { pen, n: q.n, text: snip, ts };
+  const copyText = async () => { try { await navigator.clipboard.writeText(`Q. ${q.q}\n\n${snip}`); setCp(true); setTimeout(() => setCp(false), 1500); } catch (e) {} };
   return (
     <div className="nss-libcard nss-fade">
       <div className="nss-libq">{q.q}</div>
       <div className="nss-libsnip">{snip}</div>
       <div className="nss-actions">
-        <button className="nss-btn nss-actbtn nss-tap" onClick={() => onImg(dl)}><Download size={13} /> 이미지</button>
-        <button className="nss-btn nss-actbtn nss-tap" onClick={() => onPdf(dl)}><FileText size={13} /> PDF</button>
-        {onShare && <button className="nss-btn nss-actbtn nss-tap" onClick={() => onShare(dl)}><Share2 size={13} /> 공유</button>}
+        <button className="nss-btn nss-actbtn nss-tap" onClick={() => onImg(dl)}><Download size={13} /> 이미지 다운로드</button>
+        <button className="nss-btn nss-actbtn nss-tap" onClick={() => onPdf(dl)}><FileText size={13} /> PDF 다운로드</button>
+        <button className="nss-btn nss-actbtn nss-tap" onClick={copyText}><Copy size={13} /> {cp ? "복사됨" : "내가 쓴 글 복사하기"}</button>
       </div>
       <div className="nss-libmeta"><span className="nss-chip">{q.ch}장 · p.{q.p}</span><span className="nss-tag"><Ico size={10} /> {V.label}</span><span>{ts ? relTime(ts) : ""}</span><button className="nss-btn nss-tap" style={{ marginLeft: "auto", color: "var(--ink2)", fontSize: 12 }} onClick={onOpen}>이어 쓰기 · 함께 읽기</button></div>
     </div>
