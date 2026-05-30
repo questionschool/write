@@ -79,6 +79,7 @@
   .meta{padding:20px 26px 26px;}
   .booktitle{font-family:var(--serif);font-weight:800;font-size:21px;color:#fdf6ea;margin:0 0 5px;}
   .booksub{font-family:var(--batang);font-size:13.5px;color:var(--sky);margin:0 0 12px;}
+  .bookdesc{font-family:var(--batang);font-size:12.5px;line-height:1.6;color:var(--ink3);margin:-6px 0 12px;}
   .qn{display:inline-flex;align-items:center;gap:7px;font-family:var(--gothic);font-weight:700;
     font-size:12.5px;color:var(--cream);background:rgba(241,234,216,.07);
     border:1px solid var(--line);padding:7px 13px;border-radius:999px;}
@@ -95,6 +96,11 @@
     border:1px dashed rgba(241,234,216,.22);color:var(--ink3);}
   .soonbox .s1{font-family:var(--serif);font-weight:800;font-size:30px;color:rgba(241,234,216,.28);}
   .soonbox .s2{font-family:var(--gothic);font-size:12.5px;letter-spacing:.12em;}
+  .cover-soonwrap{position:relative;}
+  .cover.dim{filter:saturate(.9) brightness(.88);}
+  .ribbon{position:absolute;top:12px;left:12px;font-family:var(--gothic);font-weight:700;font-size:11.5px;
+    letter-spacing:.08em;color:#fdf6ea;background:rgba(27,42,77,.82);border:1px solid rgba(241,234,216,.3);
+    padding:5px 11px;border-radius:999px;}
 
   footer{text-align:center;margin-top:56px;font-family:var(--batang);font-size:13px;color:var(--ink3);line-height:1.9;}
   footer a{color:var(--sky);text-decoration:none;}
@@ -136,19 +142,20 @@
         </div>
       </a>
 
-      <!-- 준비 중 -->
+      <!-- 다시, 묻다 (준비 중) -->
       <div class="card soon">
-        <div class="topbar" style="opacity:.3"></div>
+        <div class="topbar" style="opacity:.5"></div>
         <div class="cover-wrap">
-          <div class="soonbox">
-            <div class="s1">問</div>
-            <div class="s2">COMING SOON</div>
+          <div class="cover-soonwrap">
+            <img class="cover dim" src="./images/cover-askagain.jpg" alt="다시, 묻다 — 질문술사 토마스" loading="lazy" />
+            <span class="ribbon">준비 중</span>
           </div>
         </div>
         <div class="meta">
-          <h2 class="booktitle" style="color:rgba(253,246,234,.5)">다음 책</h2>
-          <p class="booksub" style="color:var(--ink3)">곧 새로운 질문노트가 열립니다</p>
-          <span class="qn" style="opacity:.5">준비 중</span>
+          <h2 class="booktitle">다시, 묻다</h2>
+          <p class="booksub">질문술사 토마스의 첫 시집</p>
+          <p class="bookdesc">수록된 80편의 시와, 어른됨을 다시 묻는 80개의 질문 노트</p>
+          <span class="qn" style="opacity:.6">곧 열립니다</span>
         </div>
       </div>
     </div>
