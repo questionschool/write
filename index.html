@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#1b2a4d" />
+<title>질문예술학교 · 함께 쓰는 질문노트</title>
+<meta name="description" content="장예원 작가의 100개의 질문, 나를 쓰는 시간 — 함께 쓰는 질문노트" />
+<meta property="og:title" content="질문예술학교 · 함께 쓰는 질문노트" />
+<meta property="og:description" content="장예원 작가의 100개의 질문, 나를 쓰는 시간" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+
+  :root{
+    --navy:#1b2a4d; --navy2:#16223f; --navy3:#22335a;
+    --coral:#ed6a35; --coral2:#f3895c; --sky:#6fb0e0;
+    --cream:#f1ead8; --ink:#e9e3d3; --ink2:#cdd4e8; --ink3:#8b96b6;
+    --line:rgba(241,234,216,.14);
+    --serif:'Nanum Myeongjo',serif; --batang:'Gowun Batang',serif;
+    --gothic:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--navy); color:var(--ink); font-family:var(--serif);
+    min-height:100vh; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(120% 80% at 82% -8%, rgba(237,106,53,.16), transparent 55%),
+      radial-gradient(120% 90% at 0% 108%, rgba(111,176,224,.14), transparent 55%);
+    background-attachment:fixed;
+  }
+  .bar{height:6px;width:100%;background:linear-gradient(90deg,var(--coral),#cf7a52 55%,var(--sky));}
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px 80px;}
+
+  header{text-align:center;padding:62px 12px 30px;}
+  .seal{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:64px;height:64px;border-radius:16px;background:var(--coral);
+    color:#fff7ee;font-family:var(--serif);font-weight:800;font-size:34px;
+    box-shadow:0 10px 30px rgba(237,106,53,.34); margin-bottom:18px;
+    animation:pop .7s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .kicker{font-family:var(--gothic);letter-spacing:.34em;font-size:12.5px;color:var(--coral2);
+    text-transform:uppercase;margin-bottom:14px;animation:rise .7s .05s both;}
+  h1{font-family:var(--serif);font-weight:800;font-size:38px;line-height:1.28;margin:0 0 14px;
+    color:#fdf6ea;letter-spacing:-.01em;animation:rise .7s .1s both;}
+  h1 .accent{color:var(--coral2);}
+  .lead{font-family:var(--batang);font-size:16px;line-height:1.85;color:var(--ink2);
+    max-width:600px;margin:0 auto;animation:rise .7s .16s both;}
+  .rule{width:54px;height:4px;background:var(--coral);border-radius:3px;margin:26px auto 6px;
+    animation:rise .7s .2s both;}
+
+  .shelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:24px;margin-top:40px;}
+
+  .card{
+    display:block;text-decoration:none;color:inherit;position:relative;
+    background:linear-gradient(180deg,var(--navy3),var(--navy2));
+    border:1px solid var(--line);border-radius:20px;overflow:hidden;
+    box-shadow:0 16px 40px rgba(0,0,0,.3); transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s,border-color .28s;
+    animation:rise .8s .26s both;
+  }
+  .card:hover{transform:translateY(-7px);box-shadow:0 26px 60px rgba(0,0,0,.42);border-color:rgba(237,106,53,.5);}
+  .card .topbar{height:5px;background:linear-gradient(90deg,var(--coral),var(--sky));}
+  .cover-wrap{padding:26px 26px 0;}
+  .cover{
+    width:100%;aspect-ratio:500/715;border-radius:10px;display:block;object-fit:cover;
+    box-shadow:0 14px 32px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.06);
+    background:var(--navy2);
+  }
+  .meta{padding:20px 26px 26px;}
+  .booktitle{font-family:var(--serif);font-weight:800;font-size:21px;color:#fdf6ea;margin:0 0 5px;}
+  .booksub{font-family:var(--batang);font-size:13.5px;color:var(--sky);margin:0 0 12px;}
+  .qn{display:inline-flex;align-items:center;gap:7px;font-family:var(--gothic);font-weight:700;
+    font-size:12.5px;color:var(--cream);background:rgba(241,234,216,.07);
+    border:1px solid var(--line);padding:7px 13px;border-radius:999px;}
+  .go{position:absolute;right:22px;bottom:24px;font-family:var(--gothic);font-weight:700;font-size:13px;
+    color:var(--coral2);display:inline-flex;align-items:center;gap:5px;transition:gap .2s;}
+  .card:hover .go{gap:10px;}
+
+  /* 준비 중 카드 */
+  .card.soon{cursor:default;animation-delay:.32s;}
+  .card.soon:hover{transform:none;box-shadow:0 16px 40px rgba(0,0,0,.3);border-color:var(--line);}
+  .soonbox{aspect-ratio:500/715;border-radius:10px;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:12px;
+    background:repeating-linear-gradient(135deg,rgba(241,234,216,.03),rgba(241,234,216,.03) 12px,transparent 12px,transparent 24px);
+    border:1px dashed rgba(241,234,216,.22);color:var(--ink3);}
+  .soonbox .s1{font-family:var(--serif);font-weight:800;font-size:30px;color:rgba(241,234,216,.28);}
+  .soonbox .s2{font-family:var(--gothic);font-size:12.5px;letter-spacing:.12em;}
+
+  footer{text-align:center;margin-top:56px;font-family:var(--batang);font-size:13px;color:var(--ink3);line-height:1.9;}
+  footer a{color:var(--sky);text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+
+  @keyframes rise{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+  @keyframes pop{from{opacity:0;transform:scale(.6) rotate(-8deg);}to{opacity:1;transform:none;}}
+
+  @media (max-width:560px){
+    header{padding:44px 8px 22px;}
+    h1{font-size:30px;}
+    .shelf{grid-template-columns:1fr;gap:20px;}
+  }
+</style>
+</head>
+<body>
+  <div class="bar"></div>
+  <div class="wrap">
+    <header>
+      <div class="seal">作</div>
+      <div class="kicker">질문예술학교</div>
+      <h1>함께 쓰는 <span class="accent">질문노트</span></h1>
+      <p class="lead">한 권의 책, 100개의 질문. 먼저 나를 쓰고, 서로의 글을 만나는 자리입니다. 함께 쓸 책을 골라 들어가세요.</p>
+      <div class="rule"></div>
+    </header>
+
+    <div class="shelf">
+      <!-- 나를 쓰는 시간 -->
+      <a class="card" href="./myself/">
+        <div class="topbar"></div>
+        <div class="cover-wrap">
+          <img class="cover" src="./images/cover-myself.jpg" alt="나를 쓰는 시간 — 장예원" loading="lazy" />
+        </div>
+        <div class="meta">
+          <h2 class="booktitle">나를 쓰는 시간</h2>
+          <p class="booksub">장예원 작가의 100개의 질문</p>
+          <span class="qn">100개의 질문 · 함께 쓰기</span>
+          <span class="go">들어가기 →</span>
+        </div>
+      </a>
+
+      <!-- 준비 중 -->
+      <div class="card soon">
+        <div class="topbar" style="opacity:.3"></div>
+        <div class="cover-wrap">
+          <div class="soonbox">
+            <div class="s1">問</div>
+            <div class="s2">COMING SOON</div>
+          </div>
+        </div>
+        <div class="meta">
+          <h2 class="booktitle" style="color:rgba(253,246,234,.5)">다음 책</h2>
+          <p class="booksub" style="color:var(--ink3)">곧 새로운 질문노트가 열립니다</p>
+          <span class="qn" style="opacity:.5">준비 중</span>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      질문예술학교 · 함께 쓰는 질문노트<br />
+      각 책의 질문은 원작 도서에서 왔습니다. 저자의 글과 함께 읽으면 더 깊어집니다.
+    </footer>
+  </div>
+</body>
+</html>
