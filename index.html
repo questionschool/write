@@ -114,6 +114,25 @@
     h1{font-size:30px;}
     .shelf{grid-template-columns:1fr;gap:20px;}
   }
+  /* 입장 코드 모달 */
+  .gate-ov{position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(12,18,34,.72); backdrop-filter:blur(4px);}
+  .gate-ov.on{display:flex;}
+  .gate-box{width:100%; max-width:380px; background:linear-gradient(180deg,var(--navy3),var(--navy2)); border:1px solid var(--line); border-radius:20px; padding:30px 26px 24px; text-align:center; box-shadow:0 24px 70px rgba(0,0,0,.5); animation:gatein .22s ease;}
+  @keyframes gatein{from{opacity:0; transform:translateY(10px) scale(.98);} to{opacity:1; transform:none;}}
+  .gate-seal{width:46px; height:46px; margin:0 auto 14px; border-radius:13px; background:linear-gradient(150deg,var(--coral),var(--coral2)); color:#fff; font-family:var(--serif); font-weight:800; font-size:24px; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(237,106,53,.4);}
+  .gate-title{margin:0 0 6px; font-family:var(--gothic); font-weight:900; font-size:19px; color:#fdf6ea;}
+  .gate-sub{margin:0 0 18px; font-family:var(--gothic); font-size:13px; line-height:1.6; color:var(--ink3);}
+  .gate-input{width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--line); background:rgba(0,0,0,.22); color:#fdf6ea; font-family:var(--gothic); font-size:16px; text-align:center; letter-spacing:3px; outline:none;}
+  .gate-input:focus{border-color:rgba(237,106,53,.6);}
+  .gate-err{min-height:16px; margin:10px 0 0; font-family:var(--gothic); font-size:12.5px; color:var(--coral2);}
+  .gate-actions{display:flex; gap:10px; margin-top:16px;}
+  .gate-btn{flex:1; padding:13px 0; border-radius:12px; border:none; cursor:pointer; font-family:var(--gothic); font-weight:700; font-size:14px; background:linear-gradient(150deg,var(--coral),var(--coral2)); color:#fff; transition:transform .15s, opacity .2s;}
+  .gate-btn:hover{transform:translateY(-1px);}
+  .gate-btn.ghost{background:transparent; border:1px solid var(--line); color:var(--ink2);}
+  /* 하단 관리자 문의 */
+  .foot-contact{margin-top:16px;}
+  .foot-btn{display:inline-block; padding:11px 20px; border-radius:11px; border:1px solid var(--line); background:rgba(241,234,216,.05); color:var(--ink2); font-family:var(--gothic); font-size:13px; font-weight:700; text-decoration:none; transition:border-color .2s, color .2s, transform .15s;}
+  .foot-btn:hover{border-color:rgba(237,106,53,.5); color:#fdf6ea; transform:translateY(-1px);}
 </style>
 </head>
 <body>
@@ -129,7 +148,7 @@
 
     <div class="shelf">
       <!-- 나를 쓰는 시간 -->
-      <a class="card" href="./myself/">
+      <a class="card" href="#" data-gate="myself" data-url="./myself/" data-code="2026" data-book="나를 쓰는 노트">
         <div class="topbar"></div>
         <div class="cover-wrap">
           <img class="cover" src="./images/cover-myself.jpg" alt="나를 쓰는 시간 — 장예원" loading="lazy" />
@@ -138,7 +157,7 @@
           <h2 class="booktitle">나를 쓰는 노트</h2>
           <p class="booksub">장예원 작가의 100개의 질문</p>
           <span class="qn">100개의 질문 · 함께 쓰기</span>
-          <span class="go">들어가기 →</span>
+          <span class="go">🔒 입장 코드로 들어가기 →</span>
         </div>
       </a>
 
@@ -163,7 +182,58 @@
     <footer>
       질문예술학교 · 함께 쓰는 질문노트<br />
       각 책의 질문은 원작 도서에서 왔습니다. 저자의 글과 함께 읽으면 더 깊어집니다.
+      <div class="foot-contact">
+        <a class="foot-btn" href="mailto:thomas@questionschool.net?subject=%5B%EB%82%98%EB%A5%BC%20%EC%93%B0%EB%8A%94%20%EB%85%B8%ED%8A%B8%5D%20%EC%9E%85%EC%9E%A5%20%EC%BD%94%EB%93%9C%20%EB%AC%B8%EC%9D%98">✉️ 입장 코드를 잊으셨나요? 관리자(토마스)에게 문의하기</a>
+      </div>
     </footer>
   </div>
+
+  <!-- 입장 코드 모달 -->
+  <div id="gate" class="gate-ov" aria-hidden="true">
+    <div class="gate-box" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+      <div class="gate-seal">作</div>
+      <h3 id="gate-title" class="gate-title">입장 코드</h3>
+      <p class="gate-sub" id="gate-sub">이 노트는 입장 코드가 필요합니다.</p>
+      <input id="gate-input" class="gate-input" type="password" inputmode="numeric" autocomplete="off" placeholder="입장 코드를 입력하세요" />
+      <p id="gate-err" class="gate-err"></p>
+      <div class="gate-actions">
+        <button id="gate-cancel" class="gate-btn ghost" type="button">취소</button>
+        <button id="gate-go" class="gate-btn" type="button">입장하기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var ov = document.getElementById("gate");
+      var input = document.getElementById("gate-input");
+      var err = document.getElementById("gate-err");
+      var sub = document.getElementById("gate-sub");
+      var target = null;
+      function open(card) {
+        target = card;
+        sub.textContent = "『" + (card.getAttribute("data-book") || "이 노트") + "』 입장 코드를 입력하세요.";
+        err.textContent = ""; input.value = "";
+        ov.classList.add("on"); ov.setAttribute("aria-hidden", "false");
+        setTimeout(function () { input.focus(); }, 60);
+      }
+      function close() { ov.classList.remove("on"); ov.setAttribute("aria-hidden", "true"); target = null; }
+      function submit() {
+        if (!target) return;
+        var need = String(target.getAttribute("data-code") || "");
+        var url = target.getAttribute("data-url");
+        if (input.value.trim() === need) { close(); window.location.href = url; }
+        else { err.textContent = "입장 코드가 올바르지 않습니다."; input.select(); }
+      }
+      document.querySelectorAll("a.card[data-gate]").forEach(function (card) {
+        card.addEventListener("click", function (e) { e.preventDefault(); open(card); });
+      });
+      document.getElementById("gate-go").addEventListener("click", submit);
+      document.getElementById("gate-cancel").addEventListener("click", close);
+      input.addEventListener("keydown", function (e) { if (e.key === "Enter") submit(); });
+      ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && ov.classList.contains("on")) close(); });
+    })();
+  </script>
 </body>
 </html>
