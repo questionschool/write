@@ -212,6 +212,11 @@ const PKEY = "nss_me_v5";
 const mem = { personal: {}, shared: {} };
 const hasStore = () => false;
 
+/* ===== 개인 정보(입장 코드·내 글)는 브라우저(localStorage)에 영구 저장 ===== */
+const LS = "nss.";
+const HAS_LS = (() => { try { const t = "__nss_t"; localStorage.setItem(t, "1"); localStorage.removeItem(t); return true; } catch (e) { return false; } })();
+if (HAS_LS) { try { for (let i = 0; i < localStorage.length; i++) { const key = localStorage.key(i); if (key && key.indexOf(LS) === 0) mem.personal[key.slice(LS.length)] = localStorage.getItem(key); } } catch (e) {} }
+
 /* ===== 구글 시트(Apps Script) 연결 ===== */
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbxr_a18CKFcLlgEO-KjsFKgeVRz3mN122qOtZAKhwY5NPogvkKFIV4rpI44IEjZu_aVYw/exec";
 const COMMENTS_ENABLED = false; // 지금은 댓글 끔. 나중에 서버 옮길 때 true 로.
@@ -265,8 +270,8 @@ async function gSet(k,v){ const s=JSON.stringify(v); mem.shared[k]=s; try{ if(ha
 async function gDel(k){ delete mem.shared[k]; try{ if(hasStore()) await window.storage.delete(k,true);}catch(e){} }
 async function gList(pre){ try{ if(hasStore()){ const r=await window.storage.list(pre,true); return (r&&r.keys)?r.keys:[]; } }catch(e){} return Object.keys(mem.shared).filter(k=>k.startsWith(pre)); }
 async function pGet(k){ try{ if(hasStore()){ const r=await window.storage.get(k,false); return r&&r.value?JSON.parse(r.value):null; } }catch(e){} return mem.personal[k]?JSON.parse(mem.personal[k]):null; }
-async function pSet(k,v){ const s=JSON.stringify(v); mem.personal[k]=s; try{ if(hasStore()) await window.storage.set(k,s,false);}catch(e){} }
-async function pDel(k){ delete mem.personal[k]; try{ if(hasStore()) await window.storage.delete(k,false);}catch(e){} }
+async function pSet(k,v){ const s=JSON.stringify(v); mem.personal[k]=s; if(HAS_LS){ try{ localStorage.setItem(LS+k,s);}catch(e){} } }
+async function pDel(k){ delete mem.personal[k]; if(HAS_LS){ try{ localStorage.removeItem(LS+k);}catch(e){} } }
 async function pList(pre){ try{ if(hasStore()){ const r=await window.storage.list(pre,false); return (r&&r.keys)?r.keys:[]; } }catch(e){} return Object.keys(mem.personal).filter(k=>k.startsWith(pre)); }
 
 const relTime = (ts) => {
