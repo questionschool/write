@@ -539,7 +539,7 @@ const css = `
 .nss-top{display:flex; align-items:center; justify-content:space-between; padding:24px 0 16px; gap:10px;}
 .nss-brand{display:flex; align-items:center; gap:11px; min-width:0;}
 .nss-seal{width:42px; height:42px; border-radius:9px; background:linear-gradient(150deg,var(--seal),#d6512a); color:#fdf6ea; flex:none; display:flex; align-items:center; justify-content:center; font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:19px; box-shadow:0 4px 14px rgba(237,106,53,.36);}
-.nss-bt{font-size:11px; color:var(--seal2); font-weight:700; display:flex; align-items:center; gap:5px;}
+.nss-bt{font-size:11px; color:var(--seal2); font-weight:700; display:flex; align-items:center; gap:5px; margin-bottom:3px;}
 .nss-bn{font-family:'Nanum Myeongjo',serif; font-size:18px; font-weight:800; letter-spacing:-.5px; line-height:1.1;}
 .nss-adtag{font-size:9.5px; padding:1px 6px; border-radius:99px; background:var(--gold); color:#1b2a4d; margin-left:6px; vertical-align:middle; font-weight:700;}
 .nss-hright{display:flex; align-items:center; gap:8px; flex:none;}
@@ -662,6 +662,11 @@ const css = `
 .nss-refresh{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--ink2); padding:6px 12px; border:1px solid var(--line2); border-radius:99px; background:var(--card);}
 .nss-refresh:hover{border-color:var(--seal); color:var(--seal2);}
 .nss-foot{text-align:center; padding:30px 0 8px; color:var(--ink3); font-size:11.5px; line-height:1.9;}
+.nss-bnav{margin-top:34px; padding-top:20px; border-top:1px solid var(--line); display:grid; grid-template-columns:repeat(4,1fr); gap:10px;}
+.nss-bnavbtn{display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:8px; text-align:center; padding:15px 8px; border-radius:13px; border:1px solid var(--line); background:var(--card); color:var(--ink2); font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif; font-size:12px; font-weight:700; line-height:1.4; text-decoration:none; transition:border-color .2s, color .2s, transform .15s;}
+.nss-bnavbtn:hover{border-color:rgba(237,106,53,.5); color:#fdf6ea; transform:translateY(-2px);}
+.nss-bnavbtn .ic{color:var(--seal2); flex:none;}
+@media (max-width:560px){ .nss-bnav{grid-template-columns:repeat(2,1fr);} }
 `;
 
 function App() {
@@ -734,6 +739,14 @@ function App() {
   const goWrite = async (n) => { setActiveN(n); setView("write"); window.scrollTo(0, 0); const e = await pGet(`mine:${pad(n)}`); setDraft(e && e.text ? e.text : ""); setVisDraft(e && e.vis ? e.vis : "club"); };
   const goHome = () => { setView("home"); window.scrollTo(0, 0); };
   const pickRandom = () => { const pool = QUESTIONS.filter((q) => !myAnswered.has(q.n)); const arr = pool.length ? pool : QUESTIONS; goWrite(arr[Math.floor(Math.random() * arr.length)].n); };
+  const pickAnother = () => {
+    if (draft.trim().length > 0 && !window.confirm("지금 쓴 글은 이 질문에 저장돼 있어요. 다른 질문으로 바꿀까요?")) return;
+    const cur = active ? active.n : null;
+    const unanswered = QUESTIONS.filter((q) => !myAnswered.has(q.n) && q.n !== cur);
+    const pool = unanswered.length ? unanswered : QUESTIONS.filter((q) => q.n !== cur);
+    const arr = pool.length ? pool : QUESTIONS;
+    goWrite(arr[Math.floor(Math.random() * arr.length)].n);
+  };
 
   const persist = useCallback(async (n, text, vis) => {
     const eKey = `e:${me.clubId}:${pad(n)}:${me.uid}`, pubKey = `pub:${pad(n)}:${me.uid}`;
@@ -892,7 +905,7 @@ function App() {
         <p className="nss-hsub">질문을 고르고 나의 글을 먼저 씁니다. 클럽·전체로 공개하면 저자의 글과 친구들의 글이 함께 열리고, 각자의 글 아래에서 이야기를 나눕니다.</p>
         <div className="nss-prog"><div className="nss-pnum">{answeredCount}<small> / 100</small></div><div className="nss-pbar"><div className="nss-pfill" style={{ width: `${answeredCount}%` }} /></div></div>
         <div className="nss-pickrow">
-          <button className="nss-btn nss-cta nss-tap" onClick={goFreeBoard}><Feather size={16} /> 자유롭게 쓰기</button>
+          <button className="nss-btn nss-cta nss-tap" onClick={goFreeWrite}><Feather size={16} /> 자유롭게 쓰기</button>
           <button className="nss-btn nss-cta ghost nss-tap" onClick={pickRandom}><Shuffle size={16} /> 오늘의 질문 받기</button>
           <button className="nss-btn nss-cta ghost nss-tap" onClick={() => { const el = document.getElementById("nss-ch"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}><BookOpen size={16} /> 직접 고르기</button>
           <button className="nss-btn nss-cta ghost nss-tap" onClick={goFeed}><Sparkles size={16} /> 나와 친구들이 답한 질문</button>
@@ -951,8 +964,8 @@ function App() {
     return (
       <div className="nss-fade">
         <button className="nss-btn nss-back" onClick={goHome}><ChevronLeft size={16} /> 질문 목록으로</button>
-        <div className="nss-qcard"><div className="nss-qmeta"><span className="nss-chip">{c.title}</span><span>질문 {pad(active.n)} / 100</span></div><div className="nss-bigq">{active.q}</div></div>
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 9 }}><button className="nss-btn nss-actbtn nss-tap" onClick={() => saveQuestionImage(active.n)}><Download size={13} /> 질문 카드 이미지 저장</button></div>
+        <div className="nss-qcard"><div className="nss-qmeta"><span className="nss-chip">{c.title}</span><span>나를 쓰는 질문 {pad(active.n)} / 100</span></div><div className="nss-bigq">{active.q}</div></div>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 9 }}><button className="nss-btn nss-actbtn nss-tap" onClick={pickAnother}><Shuffle size={13} /> 다른 질문 받기</button><button className="nss-btn nss-actbtn nss-tap" onClick={() => saveQuestionImage(active.n)}><Download size={13} /> 질문 카드 이미지 저장</button></div>
         <div className="nss-label"><PenLine size={15} /> {me.pen}의 글 <span className="ln" /></div>
         <div className="nss-vis">{Object.entries(VIS).map(([k, v]) => { const Ico = v.Icon; return (<button key={k} className={"nss-btn nss-visbtn nss-tap" + (visDraft === k ? " on" : "")} onClick={() => setVisDraft(k)}><Ico size={13} /> {v.label}</button>); })}</div>
         <div className="nss-vishint">{visDraft === "club" ? `'${me.clubName}' 클럽 친구들에게 보입니다.` : visDraft === "public" ? "모든 참여자에게 보입니다." : "내 기기에만 저장됩니다 (친구들에게 보이지 않음)."}</div>
@@ -1010,7 +1023,7 @@ function App() {
     return (
       <div className="nss-fade">
         <button className="nss-btn nss-back" onClick={() => { setView("write"); window.scrollTo(0, 0); }}><ChevronLeft size={16} /> 나의 글로 돌아가기</button>
-        <div className="nss-qcard" style={{ padding: "22px 24px" }}><div className="nss-qmeta"><span className="nss-chip">{c.id}장 · p.{active.p}</span><span>질문 {pad(active.n)}</span></div><div className="nss-bigq" style={{ fontSize: 19 }}>{active.q}</div></div>
+        <div className="nss-qcard" style={{ padding: "22px 24px" }}><div className="nss-qmeta"><span className="nss-chip">{c.id}장 · p.{active.p}</span><span>나를 쓰는 질문 {pad(active.n)}</span></div><div className="nss-bigq" style={{ fontSize: 19 }}>{active.q}</div></div>
         <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 9 }}><button className="nss-btn nss-actbtn nss-tap" onClick={() => saveQuestionImage(active.n)}><Download size={13} /> 질문 카드 이미지 저장</button></div>
         <div className="nss-label"><Users size={15} /> 글 모음 {!isPrivate && <span className="cnt">나 + {peers.length}명</span>}<span className="ln" />{!isPrivate && <button className="nss-btn nss-refresh nss-tap" onClick={() => loadRoom(active.n)}><RefreshCw size={12} /> 새로고침</button>}</div>
         {renderAuthorCard()}
@@ -1082,8 +1095,8 @@ function App() {
 
   const renderFreeWrite = () => (
     <div className="nss-fade">
-      <button className="nss-btn nss-back" onClick={() => { setView("freeboard"); window.scrollTo(0, 0); }}><ChevronLeft size={16} /> 자유 글 목록으로</button>
-      <div className="nss-hero" style={{ paddingBottom: 4 }}><div className="nss-hk">자유롭게 쓰기</div><h1 className="nss-htitle" style={{ fontSize: 25 }}>질문 없이, 오늘의 나를 적어요</h1><p className="nss-hsub" style={{ fontSize: 14 }}>제목을 달고 떠오르는 대로 적어 보세요. 100개의 질문이 아니어도 괜찮습니다.</p></div>
+      <button className="nss-btn nss-back" onClick={goHome}><ChevronLeft size={16} /> 처음으로</button>
+      <div className="nss-hero" style={{ paddingBottom: 4 }}><div className="nss-hk">자유롭게 쓰기</div><h1 className="nss-htitle" style={{ fontSize: 25 }}>자유롭게 쓰기</h1><p className="nss-hsub" style={{ fontSize: 14 }}>제목 한 줄을 쓴 이후, 떠오르는 생각을 자유롭게 적어 보세요. 『나를 쓰는 시간』에 수록된 100개의 질문이 아니어도 괜찮습니다. 직접 질문을 만들어서 제목에 넣어도 좋습니다.</p></div>
       <div className="nss-flabel" style={{ marginTop: 18 }}>제목</div>
       <input className="nss-input" placeholder="한 줄 제목 (예: 오늘 새벽 낭독에서)" maxLength={60} value={fTitle} onChange={(e) => setFTitle(e.target.value)} autoFocus />
       <div className="nss-flabel" style={{ marginTop: 16 }}>공개 범위</div>
@@ -1172,6 +1185,12 @@ function App() {
           {view === "write" && active && renderWrite()}
           {view === "room" && active && renderRoom()}
           {view === "library" && renderLibrary()}
+          <nav className="nss-bnav">
+            <button className="nss-btn nss-bnavbtn nss-tap" onClick={pickRandom}><Shuffle className="ic" size={20} /> 오늘의 질문<br />노트 쓰기</button>
+            <button className="nss-btn nss-bnavbtn nss-tap" onClick={() => { setView("library"); window.scrollTo(0, 0); }}><Library className="ic" size={20} /> 나의 노트<br />모아보기</button>
+            <button className="nss-btn nss-bnavbtn nss-tap" onClick={goFeed}><Users className="ic" size={20} /> 친구들의 노트<br />함께 보기</button>
+            <a className="nss-bnavbtn nss-tap" href="http://pf.kakao.com/_XGbin" target="_blank" rel="noopener noreferrer"><MessageCircle className="ic" size={20} /> 사이트 관리자<br />에게 문의하기</a>
+          </nav>
         </div>
 
         {settingsOpen && (
