@@ -579,10 +579,10 @@ const css = `
 
 .nss-back{display:inline-flex; align-items:center; gap:5px; font-size:13.5px; color:var(--ink2); padding:8px 0; margin-top:16px;}
 .nss-back:hover{color:var(--seal2);}
-.nss-qcard{margin-top:8px; padding:30px 26px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(170deg,var(--card),var(--paper2));}
+.nss-qcard{margin-top:8px; padding:30px 26px; border:1px solid rgba(237,106,53,.5); border-radius:18px; background:linear-gradient(165deg, rgba(237,106,53,.20), rgba(237,106,53,.06)); box-shadow:0 10px 30px rgba(237,106,53,.12);}
 .nss-qmeta{display:flex; align-items:center; gap:10px; font-size:12px; color:var(--ink3); margin-bottom:16px; flex-wrap:wrap;}
 .nss-chip{padding:3px 10px; border-radius:99px; border:1px solid var(--line2); background:var(--paper2); color:var(--ink2);}
-.nss-bigq{font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:23px; line-height:1.55; letter-spacing:-.4px;}
+.nss-bigq{font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:23px; line-height:1.55; letter-spacing:-.4px; color:#fdf6ea;}
 .nss-label{display:flex; align-items:center; gap:8px; margin:26px 0 11px; font-size:13px; letter-spacing:.05em; color:var(--ink2);}
 .nss-label .ln{flex:1; height:1px; background:var(--line);}
 .nss-label .cnt{font-size:11.5px; color:var(--ink3); letter-spacing:0;}
@@ -670,7 +670,7 @@ function App() {
   const [clubs, setClubs] = useState([]);
   const [view, setView] = useState("home");
   const [activeN, setActiveN] = useState(null);
-  const [openChap, setOpenChap] = useState(1);
+  const [openChap, setOpenChap] = useState(0);
 
   const [obMode, setObMode] = useState("join");
   const [penInput, setPenInput] = useState("");
@@ -888,14 +888,14 @@ function App() {
     <div className="nss-fade">
       <div className="nss-hero">
         <div className="nss-hk">100개의 질문 · 함께, 한 번에 하나씩</div>
-        <h1 className="nss-htitle">먼저 나를 쓰고,<br />서로의 글을 만납니다.</h1>
+        <h1 className="nss-htitle">먼저 나의 글을 쓰고,<br />서로의 글을 만납니다.</h1>
         <p className="nss-hsub">질문을 고르고 나의 글을 먼저 씁니다. 클럽·전체로 공개하면 저자의 글과 친구들의 글이 함께 열리고, 각자의 글 아래에서 이야기를 나눕니다.</p>
         <div className="nss-prog"><div className="nss-pnum">{answeredCount}<small> / 100</small></div><div className="nss-pbar"><div className="nss-pfill" style={{ width: `${answeredCount}%` }} /></div></div>
         <div className="nss-pickrow">
-          <button className="nss-btn nss-cta nss-tap" onClick={pickRandom}><Shuffle size={16} /> 오늘의 질문 받기</button>
+          <button className="nss-btn nss-cta nss-tap" onClick={goFreeBoard}><Feather size={16} /> 자유롭게 쓰기</button>
+          <button className="nss-btn nss-cta ghost nss-tap" onClick={pickRandom}><Shuffle size={16} /> 오늘의 질문 받기</button>
           <button className="nss-btn nss-cta ghost nss-tap" onClick={() => { const el = document.getElementById("nss-ch"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}><BookOpen size={16} /> 직접 고르기</button>
           <button className="nss-btn nss-cta ghost nss-tap" onClick={goFeed}><Sparkles size={16} /> 나와 친구들이 답한 질문</button>
-          <button className="nss-btn nss-cta ghost nss-tap" onClick={goFreeBoard}><Feather size={16} /> 자유롭게 쓰기</button>
         </div>
       </div>
       <BuyBanner />
@@ -912,7 +912,7 @@ function App() {
           );
         })}
       </div>
-      <div className="nss-foot">장예원 『나를 쓰는 시간』의 질문 100개를 위한 함께 쓰기 도구 · 프로토타입<br />저자의 에세이 본문은 담겨 있지 않습니다 · <a className="nss-abuylink" href={BUY_URL} target="_blank" rel="noopener noreferrer">원작 책 구입하기 →</a></div>
+      <div className="nss-foot">『나를 쓰는 시간』, 장예원 작가의 질문 100개에 함께 답해보기 위해 만든 질문 노트<br />저자의 에세이 본문은 담겨 있지 않습니다 · <a className="nss-abuylink" href={BUY_URL} target="_blank" rel="noopener noreferrer">원작 책 구입하기 →</a></div>
     </div>
   );
 
@@ -1133,7 +1133,7 @@ function App() {
           <div className="nss-obctr"><div className="nss-obseal">作</div><div className="nss-obk">함께 쓰는 글쓰기 모임</div><h1 className="nss-obtitle">나를 쓰는 시간</h1><div className="nss-subt">한 줄의 기록이 삶을 바꾼다</div><p className="nss-obsub">필명을 정하고, 참여할 클럽을 골라 입장하세요.</p></div>
           <BuyBanner />
           <div className="nss-flabel" style={{ marginTop: 22 }}>필명</div>
-          <input className="nss-input" placeholder="불릴 이름" maxLength={20} value={penInput} onChange={(e) => setPenInput(e.target.value)} />
+          <input className="nss-input" placeholder="작가로서 별칭을 기록해주세요." maxLength={20} value={penInput} onChange={(e) => setPenInput(e.target.value)} />
           <div className="nss-flabel" style={{ marginTop: 22 }}>입장 코드</div>
           <input className="nss-input" type="tel" inputMode="numeric" placeholder="숫자 4자리 이상 (본인이 정함)" value={keyInput} onChange={(e) => setKeyInput(e.target.value.replace(/[^0-9]/g, ""))} onKeyDown={(e) => e.key === "Enter" && join()} />
           <div className="nss-vishint">기기를 바꿔도 <b>같은 필명·같은 코드</b>로 들어오면 내 기록이 이어집니다. 코드는 꼭 기억해 주세요.</div>
