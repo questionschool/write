@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#1b2a4d" />
+<title>나를 쓰는 시간 — 함께 쓰기</title>
+<meta name="description" content="장예원 『나를 쓰는 시간』 100개의 질문으로 함께 쓰는 글쓰기 모임" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<style>
+  html, body { margin: 0; padding: 0; background: #1b2a4d; }
+  #root { min-height: 100vh; }
+  .nss-bootmsg { color: #cdd4e8; font-family: sans-serif; text-align: center; padding: 80px 20px; }
+</style>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js"></script>
+</head>
+<body>
+<div id="root"><div class="nss-bootmsg">불러오는 중…</div></div>
+<script type="text/babel" data-presets="react">
+/* ===== 아이콘 (lucide 스타일 인라인 SVG) ===== */
+function _ic(children) {
+  return function (props) {
+    var s = (props && props.size) || 18;
+    var st = Object.assign({ display: "inline-block", verticalAlign: "-0.18em", flex: "none" }, (props && props.style) || {});
+    return React.createElement("svg", { width: s, height: s, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round", style: st }, children.map(function (d, i) { return React.createElement(d[0], Object.assign({ key: i }, d[1])); }));
+  };
+}
+var P = function (d) { return ["path", { d: d }]; };
+var L = function (a, b, c, e) { return ["line", { x1: a, y1: b, x2: c, y2: e }]; };
+var C = function (cx, cy, r) { return ["circle", { cx: cx, cy: cy, r: r }]; };
+var R = function (x, y, w, h, rx) { return ["rect", { x: x, y: y, width: w, height: h, rx: rx }]; };
+var PL = function (pts) { return ["polyline", { points: pts }]; };
+
+var BookOpen = _ic([P("M12 7v14"), P("M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z")]);
+var PenLine = _ic([L(3, 21, 8, 21), P("M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z")]);
+var Shuffle = _ic([P("M18 4l3 3-3 3"), P("M18 20l3-3-3-3"), P("M3 7h3a5 5 0 0 1 4 2"), P("M21 7h-5a5 5 0 0 0-4 2l-6 8a5 5 0 0 1-4 2H3"), P("M21 17h-5")]);
+var Library = _ic([P("m16 6 4 14"), P("M12 6v14"), P("M8 8v12"), P("M4 4v16")]);
+var ChevronLeft = _ic([P("m15 18-6-6 6-6")]);
+var ChevronDown = _ic([P("m6 9 6 6 6-6")]);
+var Lock = _ic([R(3, 11, 18, 11, 2), P("M7 11V7a5 5 0 0 1 10 0v4")]);
+var Check = _ic([P("M20 6 9 17l-5-5")]);
+var Copy = _ic([R(9, 9, 13, 13, 2), P("M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1")]);
+var Feather = _ic([P("M12.67 19a2 2 0 0 0 1.42-.59l6.92-6.93a2.13 2.13 0 0 0-3-3L4.59 16.92A2 2 0 0 0 4 18.33V19a1 1 0 0 0 1 1z"), L(16, 8, 2, 22), L(17.5, 15, 9, 15)]);
+var X = _ic([P("M18 6 6 18"), P("m6 6 12 12")]);
+var Users = _ic([P("M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"), C(9, 7, 4), P("M22 21v-2a4 4 0 0 0-3-3.87"), P("M16 3.13a4 4 0 0 1 0 7.75")]);
+var Globe = _ic([C(12, 12, 10), P("M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"), P("M2 12h20")]);
+var MessageCircle = _ic([P("M7.9 20A9 9 0 1 0 4 16.1L2 22Z")]);
+var RefreshCw = _ic([P("M3 12a9 9 0 0 1 15-6.7L21 8"), P("M21 3v5h-5"), P("M21 12a9 9 0 0 1-15 6.7L3 16"), P("M3 21v-5h5")]);
+var Send = _ic([P("M14.5 9.5 21 3"), P("M21 3 14.5 21a.55.55 0 0 1-1 0L10 14 3 10.5a.55.55 0 0 1 0-1Z")]);
+var Settings = _ic([P("M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"), C(12, 12, 3)]);
+var ShieldCheck = _ic([P("M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"), P("m9 12 2 2 4-4")]);
+var Plus = _ic([P("M5 12h14"), P("M12 5v14")]);
+var Trash2 = _ic([P("M3 6h18"), P("M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"), L(10, 11, 10, 17), L(14, 11, 14, 17)]);
+var Unlock = _ic([R(3, 11, 18, 11, 2), P("M7 11V7a5 5 0 0 1 9.9-1")]);
+var Sparkles = _ic([P("M9.94 14.66A1 1 0 0 0 9 14a1 1 0 0 0-.94.66L7 17l-2.34.94A1 1 0 0 0 4 19a1 1 0 0 0 .66.94L7 21l.94 2.34A1 1 0 0 0 9 24a1 1 0 0 0 .94-.66L11 21l2.34-.94A1 1 0 0 0 14 19a1 1 0 0 0-.66-.94z"), P("M19 4l.9 2.1L22 7l-2.1.9L19 10l-.9-2.1L16 7l2.1-.9z"), P("M14 2l.6 1.4L16 4l-1.4.6L14 6l-.6-1.4L12 4l1.4-.6z")]);
+var Download = _ic([P("M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"), PL("7 10 12 15 17 10"), L(12, 15, 12, 3)]);
+var Share2 = _ic([C(18, 5, 3), C(6, 12, 3), C(18, 19, 3), L(8.59, 13.51, 15.42, 17.49), L(15.41, 6.51, 8.59, 10.49)]);
+var FileText = _ic([P("M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"), PL("14 2 14 8 20 8"), L(16, 13, 8, 13), L(16, 17, 8, 17), L(10, 9, 8, 9)]);
+var ExternalLink = _ic([P("M15 3h6v6"), P("M10 14 21 3"), P("M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6")]);
+const { useState, useEffect, useRef, useCallback } = React;
+
+/* ────────────────────────────────────────────────────────────
+   『나를 쓰는 시간』(장예원) 100 질문 — 함께 쓰는 글쓰기 모임 (프로토타입 v15)
+   · 책 표지(네이비/주황/하늘) 테마  · 작(作)
+   · 클럽(오픈/비밀, 관리자 생성)  · 공개범위 3단계  · 글마다 댓글
+   · 내 글 이미지/PDF 다운로드·공유 (관리자는 전체)  · 친구들이 답한 질문 피드
+   · 원작 구입 권유 — 한 줄의 기록이 삶을 바꾼다
+   ※ 비밀번호·관리자코드는 프로토타입상 클라이언트에 저장 — 진짜 보안 아님.
+   ※ 저자의 에세이 본문은 싣지 않음 — 소제목·페이지만 안내.
+   ──────────────────────────────────────────────────────────── */
+
+const ADMIN_CODE = "0000"; // 관리자 코드 — 실제 운영 시 반드시 변경/서버화
+const BUY_URL = "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=361643111";
+const MIN_LEN = 5;
+
+const CHAPTERS = [
+  { id: 1, title: "삶의 의미를 쓰다", sub: "인생은 움직이는 만큼 변한다", range: [1, 15] },
+  { id: 2, title: "관계를 기록하다", sub: "인간관계에서 최선을 다하는 방식", range: [16, 32] },
+  { id: 3, title: "내면의 온기를 채우는 연습", sub: "몸과 마음을 회복하는 기록의 힘", range: [33, 50] },
+  { id: 4, title: "어른의 길을 걷는 과정", sub: "어른은 축적된 경험이 말해준다", range: [51, 64] },
+  { id: 5, title: "꿈을 그려가는 날들", sub: "시작하는 사람의 마음가짐", range: [65, 82] },
+  { id: 6, title: "나와의 믿음을 쌓는 태도", sub: "삶은 내 해석이 만드는 이야기다", range: [83, 100] },
+];
+
+const RAW = [
+  [1,1,"살아내는 모든 순간이 의미 있다",26,"그동안 내가 최선을 다한 시간들에 대하여 써 보자"],
+  [2,1,"표류하지 않을 준비",28,"감정 기복이 커질 때 균형을 잡기 위한 나만의 방법이 있다면?"],
+  [3,1,"인생 최고의 가치는 무탈함",30,"오늘을 돌아봤을 때, 내가 놓치고 있던 감사의 순간이 있다면 무엇일까?"],
+  [4,1,"무의미한 시간도 '하는' 것이다",32,"나에게 무용한 것이어도 하면 즐거운 것들이 있는가?"],
+  [5,1,"철이 든다는 것",34,"내가 생각하는 어른의 의미는?"],
+  [6,1,"인생의 나이테",36,"나이테의 또 다른 이름은 연륜이다. 어떤 경험이 나의 연륜을 만들었는가?"],
+  [7,1,"낭비도 해봐야 한다",38,"살면서 낭비했다고 생각했던 것들은?"],
+  [8,1,"행복을 더하기보다 불행을 비울 것",40,"불필요한 불행을 만들어내는 습관이나 생각은?"],
+  [9,1,"성공한 인생이란",42,"내가 정의하는 성공한 삶의 기준은?"],
+  [10,1,"움직여야 비로소 내가 된다",44,"최근 나에게 찾아온 좋은 일과 나쁜 일은?"],
+  [11,1,"돈을 벌지만 즐겁지 않다면",46,"돈은 내 인생에서 얼마나 중요한가? 혹은 내 행복에 얼마나 영향을 미칠까?"],
+  [12,1,"간절히 바라면 닿는다",48,"지금 가장 갖고 싶은 것, 가장 갖고 싶은 자질은 무엇인가?"],
+  [13,1,"한심하게 나이 들기",50,"나이가 들어도 잃고 싶지 않은 나만의 철없는 순수함이 있다면?"],
+  [14,1,"몰입이 열어주는 뜻밖의 길",52,"미친 듯이 좋아하는 것이 있다면?"],
+  [15,1,"행복은 내가 행동한 결과",56,"남은 인생을 어떻게 살고 싶은가?"],
+  [16,2,"돈독한 사이를 만드는 한마디",68,"오래 기억에 남는 누군가의 한마디가 있다면? 그 말이 어떤 영향을 주었는가?"],
+  [17,2,"오래 가는 사이의 비밀",70,"가까운 이들에게도 차마 꺼내기 어려웠던 나의 비밀은?"],
+  [18,2,"웃게 되는 사람의 곁에 있을 것",72,"사람과의 관계에서 내가 소중히 여기는 것은?"],
+  [19,2,"아낄수록 표현하세요",74,"아끼는 사람에게 마음을 전하는 나만의 표현법은?"],
+  [20,2,"일 vs 관계",76,"주변 사람들에게 나는 어떤 사람일까?"],
+  [21,2,"관계의 과소비 관리법",78,"불필요한 관계라도 유지할 것인가, 정리할 것인가?"],
+  [22,2,"단정 지으면 놓칠 수도 있다",82,"조금 더 가까워질 수 있었을 텐데 싶은 아쉬움이 남는 관계가 있는가?"],
+  [23,2,"미워하는 마음 다스리기",84,"미워하는 감정을 긍정적인 방향으로 바꾸기 위해 할 수 있는 작은 실천이 있다면?"],
+  [24,2,"거리감이 주는 편안함",86,"좋은 관계를 위해서는 자주 만나는 것이 필수적일까?"],
+  [25,2,"한때 우리였던 시간을 기억하는 방식",88,"여전히 마음에 남은 사람이 있다면? 그 사람의 가장 기억에 남는 점은?"],
+  [26,2,"사랑의 실체",90,"다른 사람을 위해 내가 배려할 수 있는 행동은?"],
+  [27,2,"가족에게 가혹해지지 않기",92,"가족에게 냉정해지거나 무심하게 대했을 때 나의 마음은?"],
+  [28,2,"침묵하지 않는 연습",94,"무례한 상황을 참았던 적이 있다면? 비슷한 일을 또 겪을 때 나는 어떻게 할 수 있을까?"],
+  [29,2,"지나간 인연이 알려주는 것들",98,"학창 시절이나 사회 초년생 시절에 만난 인연 속에서 무엇을 배웠는가?"],
+  [30,2,"관계가 발전되지 못하는 이유",100,"형식적으로 유지하는 관계가 있는가? 어떻게 개선하면 좋을까?"],
+  [31,2,"눈치 보는 나, 배려하는 나",102,"타인의 눈치를 본 적이 있다면 그때의 나는 왜 그랬을까?"],
+  [32,2,"궁금한 사람이 생기는 행운",107,"누군가와의 관계에서 새로운 호기심이 다시 피어났던 순간이 있었다면?"],
+  [33,3,"사소한 추진력이 만드는 상쾌함",114,"일상의 작은 변화를 위해 추진해 보고 싶은 일이 있다면?"],
+  [34,3,"슬픔을 밀어내지마",116,"주체할 수 없이 슬펐던 일이 있었다면? 슬픔 앞에서 나는 어땠는가?"],
+  [35,3,"노력과 집착 사이",118,"내 힘만으로 해결하려는 부담을 내려놓았을 때, 오히려 잘 풀렸던 적이 있다면?"],
+  [36,3,"평정심이 주는 힘",120,"그때는 초조했지만 지나고 보니 별일 아니었던 순간이 있었는가?"],
+  [37,3,"지금의 걱정은 결국 과거가 된다",122,"지금 나를 불안하게 만드는 두려움이 있다면, 두려움을 키우는 요소는 무엇일까?"],
+  [38,3,"외로움과 직면하기",124,"나를 외롭게 만드는 것은 무엇인가? 그리고 외로움을 마주하는 나의 자세는 어떠한가?"],
+  [39,3,"내 마음을 나도 모른다면",128,"책, 칼럼, SNS 등 관계없이 최근에 읽은 글 중에서 밑줄을 친 문장이 있다면 써 보자."],
+  [40,3,"놀아본 사람이 놀 줄 안다",130,"지금 당장 휴식이 주어진다면 해보고 싶은 일은?"],
+  [41,3,"꽃길이 아닌 자갈밭을 걷더라도",132,"자갈밭을 일구는 듯 막막할 때, 나에게 해주고 싶은 말은?"],
+  [42,3,"찰나를 즐겁다고 느끼기",134,"나에게 '좋은 하루'란 어떤 요소가 모였을 때 완성될까?"],
+  [43,3,"쓰는 순간, 무엇이든 될 수 있다",136,"글로 남기고 싶은 일이나 속마음이 있다면?"],
+  [44,3,"행복하다고 들뜨지 말 것",138,"행복이 찾아왔을 때 충분히 만끽하는가? 아니면 불안함이 먼저 떠오르는가?"],
+  [45,3,"무던해지자는 마인드컨트롤",140,"나에게 영향을 준 가장 의미 있는 실패는?"],
+  [46,3,"마음의 실타래를 푸는 법",142,"복잡한 생각을 정리하기 위해 내가 하는 행동은?"],
+  [47,3,"아무렇지 않은 척",144,"강해 보이기 위해 애썼던 적이 있었는가? 그때의 나는 어떤 마음이었을까?"],
+  [48,3,"일부러 여백을 남겨두는 용기",150,"오래 지키고 싶은 인생의 철학이나 원칙은?"],
+  [49,3,"바쁘다고 잘 사는 것은 아니지만",152,"전혀 다른 나를 경험하기 위해 해볼 수 있는 일은?"],
+  [50,3,"기록은 내 역사의 증거",154,"지금까지 포기하지 않은 나에게 건네는 칭찬 한마디?"],
+  [51,4,"아픈 건 청춘만이 아니다",163,"오랫동안 이어진 나의 고질적인 고민이 있다면? 만약 없다면 어떻게 해결해 왔을까?"],
+  [52,4,"독립은 공간이 아니라 태도의 문제",166,"내가 정의하는 독립의 의미는? 10년 후 나는 어떤 모습으로 살아가고 있을까?"],
+  [53,4,"어른은 스스로를 소홀히 하지 않는다",168,"나를 아끼는 연습으로 오늘 당장 실천할 수 있는 작은 행동은?"],
+  [54,4,"선택의 갈림길에서",172,"인생의 중요한 선택을 해야 했던 순간, 무엇을 기준으로 결정을 내렸는가?"],
+  [55,4,"감정의 무게 조절법",174,"누군가에게 해주고 싶은 애정 어린 말들이 있다면 무엇을 글로 남길 것인가?"],
+  [56,4,"때로는 오기가 나를 움직인다",176,"타인이 준 상처가 도리어 나를 성장시키는 전환점이 된 순간은?"],
+  [57,4,"욕하지 않을 결심",178,"슬픔, 분노, 질투 등 내가 숨기지 못하는 취약한 감정이 있다면 무엇인가?"],
+  [58,4,"과거는 아무런 힘이 없다지만",180,"떠올리면 힘이 되는 예전의 추억이 있다면?"],
+  [59,4,"사소한 선택이 만들어주는 것",182,"내가 생각하는 가치있는 소비란?"],
+  [60,4,"대가 없는 무한정의 사랑",186,"가족의 사랑은 나에게 어떤 의미일까?"],
+  [61,4,"영원한 것은 없다",190,"시간이 지나면서 그 의미가 달라진 사람이나 기억이 있다면 어떤 것이었을까?"],
+  [62,4,"겁이 많아진다는 것은",192,"과거의 나에게 다시 배우고 싶은 태도나 마음가짐이 있을까?"],
+  [63,4,"인생은 끊임없는 교정이다",196,"사소한 걱정에 많은 에너지를 쏟았던 적은 언제인가?"],
+  [64,4,"부고를 받아들이는 마음",200,"사랑하는 사람을 떠나보낸 적이 있는가? 그렇다면 떠난 이가 내게 남긴 가장 큰 가르침은 무엇인가?"],
+  [65,5,"잘하려고 애쓸수록 감정은 소모된다",212,"지금까지 꼭 붙들고 놓지 못했던 것이 있다면 무엇일까?"],
+  [66,5,"목표 선언은 가장 강한 실행력",214,"원하는 일을 이루면 내 삶은 어떻게 달라질까?"],
+  [67,5,"인생은 둥글다",216,"완벽해야 한다는 부담감에 스스로를 몰아붙인 적이 있었다면 그 결과는 어땠는가?"],
+  [68,5,"준비한 만큼 이루어진다",220,"가장 신뢰하는 나의 면모는?"],
+  [69,5,"길을 잃어야 방향을 찾는다",224,"어떻게 살아가야 할지 몰라 흔들릴 때, 다시 일어서게 한 것은?"],
+  [70,5,"삶은 경주가 아니다",226,"목표를 향해 조급하게 달려가고 있지는 않는가? 지금 내가 서두르는 일이 정말 빠르게 해야 하는 것일까?"],
+  [71,5,"실수를 낙인으로 받아들이지 말 것",228,"새로운 환경에서 나의 부족함이 드러났을 때 어떤 감정을 느꼈고, 그런 경험이 어떤 의미를 남겼을까?"],
+  [72,5,"일 중독자의 결말",232,"스트레스로 지친 나를 회복시키기 위해 할 수 있는 행동은?"],
+  [73,5,"내 시간을 능숙하게 다루기",234,"하루를 의미 있고 효과적으로 보내기 위해 지키고 싶은 루틴은?"],
+  [74,5,"삶의 씨앗이 되는 가치",238,"가장 지향하는 삶의 가치는 무엇인가? 그것과 오늘 하루를 엮어 짧은 글을 써 보자."],
+  [75,5,"의미부여가 주는 원동력",242,"새롭게 공부해 보고 싶은 분야는?"],
+  [76,5,"어느 할아버지가 가르쳐준 꿈",246,"마음 한구석에 오랫동안 자리 잡은 꿈이 있다면?"],
+  [77,5,"어른에겐 정해진 공식이 없다",248,"중요한 선택을 얼마나 주체적으로 해왔는가? 혹은 사회적 기대와 나의 진짜 바람 사이에서 갈등한 적이 있다면 그땐 어떤 선택을 했는가?"],
+  [78,5,"롤 모델의 존재감",250,"나의 롤 모델은? 그 사람에게서 어떤 점을 닮고 싶은가?"],
+  [79,5,"열심히 하라는 말의 무책임",252,"내가 이루고 싶은 성공을 하나 꼽는다면?"],
+  [80,5,"어른도 여전히 두려운 게 많다",254,"내가 가장 겪고 싶지 않은 실패는?"],
+  [81,5,"최소한의 성실함",256,"오랫동안 꾸준히 이어온, 또는 앞으로 지키고 싶은 습관이 있다면?"],
+  [82,5,"선한 마음의 쓸모",258,"나의 버킷리스트는?"],
+  [83,6,"배짱은 키우고 태도는 겸손하게",270,"남들과 다른 나만의 강점은?"],
+  [84,6,"정직함은 결국 살아남는다",272,"결과와 상관없이 과정만으로도 보람찼던 경험이 있다면?"],
+  [85,6,"가벼운 말이 끼치는 영향",274,"누군가의 말이나 글로 인해 상처받거나 고뇌해 본 적은?"],
+  [86,6,"편한 길에는 남는 것이 없다",276,"여태껏 편한 길과 어려운 길 중 어느 쪽을 더 많이 택했는가?"],
+  [87,6,"함께여서 빛나는 순간들",278,"'함께하는 가치'를 가장 크게 느꼈던 순간은?"],
+  [88,6,"내 인생의 온도 36.5℃",280,"나는 지금 몇 도의 삶을 살고 있을까? 그렇게 생각한 이유는?"],
+  [89,6,"나를 얼마나 조율할 수 있나요",282,"나를 조율하는 과정이 인생이라면 지금 내 인생은 어떤 메시지를 주고 있을까?"],
+  [90,6,"최선을 남기는 삶",284,"오늘 내가 최선을 다한 일은?"],
+  [91,6,"사랑이 주는 힘",286,"최근 나를 따뜻하게 만든, 사랑이 깃든 순간은?"],
+  [92,6,"순간을 즐기면 행복할 기회가 온다",288,"오늘 하루 행복이라고 이름 붙일 만한 일은?"],
+  [93,6,"어른과 아이를 가르는 질문",290,"어린 시절 꿈꾸던 삶과 지금의 모습은 얼마나 닮았을까?"],
+  [94,6,"세상은 나에게 관심이 없다",292,"남들의 평가에 얼마나 일희일비하는가?"],
+  [95,6,"가장 좋아하는 단어",294,"가장 자주 쓰고 좋아하는 단어는?"],
+  [96,6,"위하는 마음",296,"사랑하는 이를 위해 내가 할 수 있는 행동은?"],
+  [97,6,"미완성인 나를 채우는 시간",298,"일기, SNS, 블로그 등 과거의 기록을 꺼내보자. 지금 보면 어떤 생각이 드는가?"],
+  [98,6,"흔들려도 부서지지 않는 것",300,"요즘 나는 어떤 희망을 품고 있는가?"],
+  [99,6,"멈추지 않아서 고맙다",302,"수고하며 살아온 나에게 해주고 싶은 말?"],
+  [100,6,"오늘의 기록이 남기는 선물",304,"1년 후, 어떤 모습이길 원하는가?"],
+];
+
+const QUESTIONS = RAW.map(([n, ch, t, p, q]) => ({ n, ch, t, p, q }));
+const Q = (n) => QUESTIONS.find((x) => x.n === n);
+const chapterOf = (id) => CHAPTERS.find((c) => c.id === id);
+const pad = (n) => String(n).padStart(3, "0");
+const genId = () => Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4);
+const slug = (s) => (s || "club").trim().replace(/[\s:/\\'"]+/g, "-").slice(0, 40) || "club";
+
+const VIS = { private: { label: "나만 보기", Icon: Lock }, club: { label: "클럽 공개", Icon: Users }, public: { label: "전체 공개", Icon: Globe } };
+
+const PKEY = "nss_me_v5";
+const mem = { personal: {}, shared: {} };
+const hasStore = () => false;
+
+/* ===== 구글 시트(Apps Script) 연결 ===== */
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbxr_a18CKFcLlgEO-KjsFKgeVRz3mN122qOtZAKhwY5NPogvkKFIV4rpI44IEjZu_aVYw/exec";
+const COMMENTS_ENABLED = false; // 지금은 댓글 끔. 나중에 서버 옮길 때 true 로.
+const visK = (v) => (v === "public" ? "전체" : v === "private" ? "나만" : "클럽");
+const visFromK = (k) => (k === "전체" ? "public" : k === "나만" ? "private" : "club");
+const nowISO = () => new Date().toISOString();
+
+function sheetLoad() {
+  return new Promise((resolve, reject) => {
+    const cb = "__nss_cb_" + Math.random().toString(36).slice(2);
+    const sc = document.createElement("script");
+    let done = false;
+    const cleanup = () => { try { delete window[cb]; } catch (e) {} if (sc.parentNode) sc.parentNode.removeChild(sc); };
+    window[cb] = (data) => { done = true; cleanup(); resolve(data); };
+    sc.onerror = () => { if (!done) { cleanup(); reject(new Error("sheet load failed")); } };
+    sc.src = SHEET_URL + "?callback=" + cb + "&t=" + Date.now();
+    document.body.appendChild(sc);
+    setTimeout(() => { if (!done) { cleanup(); reject(new Error("sheet load timeout")); } }, 15000);
+  });
+}
+function sheetPost(action, sheet, record) {
+  try {
+    fetch(SHEET_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: action, sheet: sheet, record: record }) }).catch(function () {});
+  } catch (e) {}
+}
+function hydrate(data, meUid) {
+  for (const k of Object.keys(mem.shared)) delete mem.shared[k];
+  const clubs = (data && data["클럽"]) || [];
+  for (const c of clubs) { if (!c.id) continue; mem.shared["club:" + c.id] = JSON.stringify({ id: String(c.id), name: c["클럽명"], type: c["유형"] || "open", pass: String(c["비밀번호"] || ""), ts: Date.parse(c["날짜"]) || Date.now() }); }
+  const geul = (data && data["글"]) || [];
+  for (const r of geul) {
+    if (!r.id) continue;
+    const vis = visFromK(r["공개범위"]); const uid = String(r["uid"] || ""); const ts = Date.parse(r["날짜"]) || Date.now();
+    if (String(r["유형"]) === "자유") {
+      const pid = String(r.id); const payload = { pid, uid, pen: r["필명"], clubId: String(r["클럽"]), title: r["제목"] || "", text: r["내용"] || "", ts };
+      if (vis === "club") mem.shared["fe:" + r["클럽"] + ":" + pid] = JSON.stringify(payload);
+      else if (vis === "public") mem.shared["fpub:" + pid] = JSON.stringify(payload);
+      if (uid === meUid && !mem.personal["freemine:" + pid]) mem.personal["freemine:" + pid] = JSON.stringify({ title: payload.title, text: payload.text, ts, vis });
+    } else {
+      const n = parseInt(r["질문번호"], 10); if (!n) continue; const nn = String(n).padStart(3, "0");
+      const payload = { uid, pen: r["필명"], clubId: String(r["클럽"]), text: r["내용"] || "", ts };
+      if (vis === "club") mem.shared["e:" + r["클럽"] + ":" + nn + ":" + uid] = JSON.stringify(payload);
+      else if (vis === "public") mem.shared["pub:" + nn + ":" + uid] = JSON.stringify(payload);
+      if (uid === meUid && !mem.personal["mine:" + nn]) mem.personal["mine:" + nn] = JSON.stringify({ text: payload.text, ts, vis });
+    }
+  }
+}
+async function reloadSheet(meUid) { try { const d = await sheetLoad(); hydrate(d, meUid); return true; } catch (e) { return false; } }
+async function gGet(k){ try{ if(hasStore()){ const r=await window.storage.get(k,true); return r&&r.value?JSON.parse(r.value):null; } }catch(e){} return mem.shared[k]?JSON.parse(mem.shared[k]):null; }
+async function gSet(k,v){ const s=JSON.stringify(v); mem.shared[k]=s; try{ if(hasStore()) await window.storage.set(k,s,true);}catch(e){} }
+async function gDel(k){ delete mem.shared[k]; try{ if(hasStore()) await window.storage.delete(k,true);}catch(e){} }
+async function gList(pre){ try{ if(hasStore()){ const r=await window.storage.list(pre,true); return (r&&r.keys)?r.keys:[]; } }catch(e){} return Object.keys(mem.shared).filter(k=>k.startsWith(pre)); }
+async function pGet(k){ try{ if(hasStore()){ const r=await window.storage.get(k,false); return r&&r.value?JSON.parse(r.value):null; } }catch(e){} return mem.personal[k]?JSON.parse(mem.personal[k]):null; }
+async function pSet(k,v){ const s=JSON.stringify(v); mem.personal[k]=s; try{ if(hasStore()) await window.storage.set(k,s,false);}catch(e){} }
+async function pDel(k){ delete mem.personal[k]; try{ if(hasStore()) await window.storage.delete(k,false);}catch(e){} }
+async function pList(pre){ try{ if(hasStore()){ const r=await window.storage.list(pre,false); return (r&&r.keys)?r.keys:[]; } }catch(e){} return Object.keys(mem.personal).filter(k=>k.startsWith(pre)); }
+
+const relTime = (ts) => {
+  if (!ts) return "";
+  const s = Math.floor((Date.now() - ts) / 1000);
+  if (s < 60) return "방금"; if (s < 3600) return `${Math.floor(s/60)}분 전`;
+  if (s < 86400) return `${Math.floor(s/3600)}시간 전`;
+  const d = new Date(ts); return `${d.getMonth()+1}.${d.getDate()}`;
+};
+const fmtDateK = (ts) => { const d = new Date(ts || Date.now()); return `${d.getFullYear()}. ${d.getMonth() + 1}. ${d.getDate()}.`; };
+
+async function ensureSeedClubs() {
+  const existing = (await gList("club:")).map((k) => k.split(":")[1]);
+  const seeds = [
+    { id: "질문예술학교", name: "질문예술학교", type: "open", pass: "" },
+    { id: "질문디자인연구소", name: "질문디자인연구소", type: "secret", pass: "3079" },
+  ];
+  for (const s of seeds) if (!existing.includes(s.id)) { await gSet(`club:${s.id}`, { ...s, ts: Date.now(), seed: true }); sheetPost("add", "클럽", { id: s.id, "클럽명": s.name, "유형": s.type, "비밀번호": s.pass || "", "날짜": nowISO() }); }
+}
+async function loadClubsArr() {
+  const keys = await gList("club:"); const arr = [];
+  for (const k of keys) { const v = await gGet(k); if (v) arr.push(v); }
+  return arr.sort((a, b) => a.ts - b.ts);
+}
+
+/* ── PNG card drawing (no external libs) ── */
+function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+function wrapLines(ctx, text, maxW) {
+  const out = []; const paras = (text || "").split(/\n/);
+  for (const para of paras) {
+    if (para === "") { out.push(""); continue; }
+    let line = "";
+    for (const ch of para) { const t = line + ch; if (ctx.measureText(t).width > maxW && line) { out.push(line); line = ch; } else line = t; }
+    out.push(line);
+  }
+  return out;
+}
+async function drawEntryCanvas(entry) {
+  try { if (document.fonts) await document.fonts.ready; } catch (e) {}
+  const free = !!entry.free; const q = free ? null : Q(entry.n);
+  const W = 1080, PAD = 96, contentW = W - PAD * 2;
+  const qFont = "800 44px 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif", bFont = "400 36px 'Gowun Batang','Nanum Myeongjo', serif";
+  const qPad = PAD + 44, qContentW = W - qPad * 2;
+  const tmp = document.createElement("canvas").getContext("2d");
+  tmp.font = qFont; const qLines = wrapLines(tmp, free ? (entry.title || "자유 기록") : q.q, qContentW);
+  tmp.font = bFont; const bLines = wrapLines(tmp, (entry.text || "").trim() || "(빈 글)", contentW);
+  const qLH = 64, bLH = 64;
+  // ── layout ──
+  const qTop = 232;
+  const qBottom = qTop + (qLines.length - 1) * qLH;
+  const divY = qBottom + 40;
+  const aSealTop = divY + 30, aSealSize = 56;
+  const aTextTop = aSealTop + aSealSize + 48;
+  const aBottom = aTextTop + (bLines.length - 1) * bLH;
+  const fDiv = aBottom + 50;
+  const fTag = fDiv + 56;
+  const H = Math.max(760, fTag + 40);
+  const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+  const ctx = cv.getContext("2d");
+  ctx.fillStyle = "#1b2a4d"; ctx.fillRect(0, 0, W, H);
+  const glow = ctx.createLinearGradient(0, H - 240, 0, H); glow.addColorStop(0, "rgba(111,176,224,0)"); glow.addColorStop(1, "rgba(111,176,224,0.07)");
+  ctx.fillStyle = glow; ctx.fillRect(0, H - 240, W, 240);
+  const bar = ctx.createLinearGradient(0, 0, W, 0); bar.addColorStop(0, "#ed6a35"); bar.addColorStop(.55, "#cf7a52"); bar.addColorStop(1, "#6fb0e0");
+  ctx.fillStyle = bar; ctx.fillRect(0, 0, W, 12); ctx.fillRect(0, H - 8, W, 8);
+
+  // ── 상단: 問 + 출처 ──
+  ctx.fillStyle = "#6fb0e0"; roundRect(ctx, PAD, 58, 66, 66, 15); ctx.fill();
+  ctx.fillStyle = "#fdf6ea"; ctx.font = "800 38px 'Nanum Myeongjo', serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("問", PAD + 33, 58 + 35);
+  ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+  if (free) {
+    ctx.fillStyle = "#cdd4e8"; ctx.font = "italic 700 23px 'Nanum Myeongjo',serif"; ctx.fillText("Time to write myself · '" + entry.pen + "'", PAD + 88, 100);
+  } else {
+    ctx.fillStyle = "#cdd4e8"; ctx.font = "700 23px 'Nanum Myeongjo',serif"; ctx.fillText("질문 " + pad(q.n) + " · 『나를 쓰는 시간』 · p." + q.p, PAD + 88, 92);
+    ctx.fillStyle = "#8b96b6"; ctx.font = "400 20px 'Nanum Myeongjo',serif"; ctx.fillText("「" + q.t + "」 · 장예원", PAD + 88, 120);
+  }
+  ctx.fillStyle = "#ed6a35"; ctx.fillRect(W / 2 - 32, 170, 64, 5);
+  ctx.fillStyle = "#f3895c"; ctx.font = qFont; ctx.textAlign = "center"; let y = qTop;
+  for (const ln of qLines) { ctx.fillText(ln, W / 2, y); y += qLH; }
+  ctx.textAlign = "left";
+
+  // 구분선
+  ctx.strokeStyle = "rgba(241,234,216,.16)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(PAD, divY); ctx.lineTo(W - PAD, divY); ctx.stroke();
+
+  // ── 중단: 作 + 답한 날짜·필명 + 답 ──
+  ctx.fillStyle = "#ed6a35"; roundRect(ctx, PAD, aSealTop, aSealSize, aSealSize, 13); ctx.fill();
+  ctx.fillStyle = "#fdf6ea"; ctx.font = "800 32px 'Nanum Myeongjo', serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("作", PAD + aSealSize / 2, aSealTop + aSealSize / 2 + 1);
+  ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = "#6fb0e0"; ctx.font = "700 21px 'Nanum Myeongjo',serif"; ctx.fillText(fmtDateK(entry.ts) + " · '" + entry.pen + "'의 기록", PAD + aSealSize + 22, aSealTop + 36);
+  ctx.fillStyle = "#e7e1d0"; ctx.font = bFont; y = aTextTop;
+  for (const ln of bLines) { ctx.fillText(ln, PAD, y); y += bLH; }
+
+  // ── 하단: 중앙 정렬 한 줄 ──
+  ctx.strokeStyle = "rgba(241,234,216,.16)"; ctx.beginPath(); ctx.moveTo(PAD, fDiv); ctx.lineTo(W - PAD, fDiv); ctx.stroke();
+  ctx.textAlign = "center"; ctx.fillStyle = "#ed6a35"; ctx.font = "italic 700 25px 'Nanum Myeongjo',serif";
+  ctx.fillText("오늘의 기록이 내일의 나를 변화시킵니다.", W / 2, fTag);
+  ctx.textAlign = "left";
+  return cv;
+}
+
+/* 정사각 질문 카드 — 질문(번호) 또는 자유 글(제목)만 */
+async function drawQuestionCard(arg) {
+  try { if (document.fonts) await document.fonts.ready; } catch (e) {}
+  const free = typeof arg === "object" && arg && arg.free;
+  const q = free ? null : Q(arg); const c = free ? null : chapterOf(q.ch);
+  const headline = free ? (arg.title || "자유 기록") : q.q;
+  const S = 1080, PAD = 96;
+  const cv = document.createElement("canvas"); cv.width = S; cv.height = S;
+  const ctx = cv.getContext("2d");
+  ctx.fillStyle = "#1b2a4d"; ctx.fillRect(0, 0, S, S);
+  const glow = ctx.createLinearGradient(0, S - 300, 0, S); glow.addColorStop(0, "rgba(111,176,224,0)"); glow.addColorStop(1, "rgba(111,176,224,0.07)");
+  ctx.fillStyle = glow; ctx.fillRect(0, S - 300, S, 300);
+  const bar = ctx.createLinearGradient(0, 0, S, 0); bar.addColorStop(0, "#ed6a35"); bar.addColorStop(.55, "#cf7a52"); bar.addColorStop(1, "#6fb0e0");
+  ctx.fillStyle = bar; ctx.fillRect(0, 0, S, 12); ctx.fillRect(0, S - 8, S, 8);
+  // 모서리 꺾쇠 (우상단 ¬ / 좌하단 └)
+  ctx.strokeStyle = "rgba(241,234,216,0.45)"; ctx.lineWidth = 3; ctx.lineCap = "round"; ctx.lineJoin = "round";
+  const cm = 56, cl = 60;
+  ctx.beginPath(); ctx.moveTo(S - cm - cl, cm); ctx.lineTo(S - cm, cm); ctx.lineTo(S - cm, cm + cl); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cm, S - cm - cl); ctx.lineTo(cm, S - cm); ctx.lineTo(cm + cl, S - cm); ctx.stroke();
+  ctx.lineCap = "butt"; ctx.lineJoin = "miter";
+  // 상단 좌측 둥근 박스 — 질문: 장 제목 / 자유: Time to write myself
+  ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
+  ctx.font = free ? "italic 700 24px 'Nanum Myeongjo',serif" : "700 25px 'Nanum Myeongjo',serif";
+  const label = free ? "Time to write myself" : c.title; const tw = ctx.measureText(label).width;
+  const pillX = PAD, pillY = 80, pillH = 54, ipad = 26;
+  ctx.fillStyle = "rgba(241,234,216,0.06)"; ctx.strokeStyle = "rgba(241,234,216,0.30)"; ctx.lineWidth = 1.4;
+  roundRect(ctx, pillX, pillY, tw + ipad * 2, pillH, pillH / 2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = "#e7e1d0"; ctx.fillText(label, pillX + ipad, pillY + 36);
+  // 가운데 — 질문/제목, 오렌지 고딕
+  const qFont = "800 54px 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif", qLH = 76;
+  const qMaxW = S - (PAD + 28) * 2;
+  ctx.font = qFont; const qLines = wrapLines(ctx, headline, qMaxW);
+  const center = ((230) + (S - 240)) / 2, blockH = (qLines.length - 1) * qLH;
+  ctx.fillStyle = "#ed6a35"; ctx.fillRect(S / 2 - 32, center - blockH / 2 - 66, 64, 5);
+  ctx.fillStyle = "#f3895c"; ctx.font = qFont; ctx.textAlign = "center";
+  let y = center - blockH / 2 + 18;
+  for (const ln of qLines) { ctx.fillText(ln, S / 2, y); y += qLH; }
+  // 하단 우측 — 출처
+  ctx.textAlign = "right";
+  if (free) {
+    ctx.fillStyle = "#cdd4e8"; ctx.font = "700 22px 'Nanum Myeongjo',serif";
+    ctx.fillText("'" + (arg.pen || "") + "'의 기록", S - PAD, S - 92);
+  } else {
+    ctx.fillStyle = "#cdd4e8"; ctx.font = "700 22px 'Nanum Myeongjo',serif";
+    ctx.fillText("질문 " + pad(arg) + " · 『나를 쓰는 시간』 · p." + q.p, S - PAD, S - 118);
+    ctx.fillStyle = "#8b96b6"; ctx.font = "400 21px 'Nanum Myeongjo',serif";
+    ctx.fillText("「" + q.t + "」 · 장예원", S - PAD, S - 86);
+  }
+  ctx.textAlign = "left";
+  return cv;
+}
+
+/* 흰 바탕 출력용 문서 (PDF 용) */
+async function drawDocCanvas(entry) {
+  try { if (document.fonts) await document.fonts.ready; } catch (e) {}
+  const free = !!entry.free; const q = free ? null : Q(entry.n);
+  const W = 1240, PAD = 120, contentW = W - PAD * 2;
+  const qFont = "700 44px 'Nanum Myeongjo', serif", bFont = "400 34px 'Gowun Batang','Nanum Myeongjo', serif";
+  const tmp = document.createElement("canvas").getContext("2d");
+  tmp.font = qFont; const qLines = wrapLines(tmp, free ? (entry.title || "자유 기록") : q.q, contentW);
+  tmp.font = bFont; const bLines = wrapLines(tmp, (entry.text || "").trim() || "(빈 글)", contentW);
+  const qLH = 62, bLH = 58;
+  const headTop = 116, ruleY = 188, metaY = 232, qTop = 300;
+  const qBottom = qTop + (qLines.length - 1) * qLH;
+  const aLabelY = qBottom + 64, aTop = aLabelY + 50;
+  const aBottom = aTop + (bLines.length - 1) * bLH;
+  const fRule = aBottom + 72, fTop = fRule + 48;
+  const H = Math.max(1754, fTop + 90);
+  const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+  const ctx = cv.getContext("2d");
+  ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, W, H);
+  const bar = ctx.createLinearGradient(0, 0, W, 0); bar.addColorStop(0, "#e0672f"); bar.addColorStop(1, "#5b9fd4");
+  ctx.fillStyle = bar; ctx.fillRect(0, 0, W, 8);
+  ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
+  ctx.fillStyle = "#1b2a4d"; ctx.font = "800 26px 'Nanum Myeongjo',serif"; ctx.fillText("나를 쓰는 시간", PAD, headTop);
+  ctx.fillStyle = "#9a9a9a"; ctx.font = "400 20px 'Nanum Myeongjo',serif"; ctx.textAlign = "right"; ctx.fillText(fmtDateK(entry.ts) + " · " + entry.pen, W - PAD, headTop); ctx.textAlign = "left";
+  ctx.strokeStyle = "#e4e4e4"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(PAD, ruleY); ctx.lineTo(W - PAD, ruleY); ctx.stroke();
+  ctx.fillStyle = "#b0673a"; ctx.font = "700 21px 'Nanum Myeongjo',serif"; ctx.fillText(free ? "Time to write myself" : ("질문 " + pad(q.n) + " · 「" + q.t + "」 · 『나를 쓰는 시간』 p." + q.p), PAD, metaY);
+  ctx.fillStyle = "#1b2a4d"; ctx.font = qFont; let y = qTop;
+  for (const ln of qLines) { ctx.fillText(ln, PAD, y); y += qLH; }
+  ctx.fillStyle = "#c85a2c"; ctx.font = "700 22px 'Nanum Myeongjo',serif"; ctx.fillText(entry.pen + "의 기록", PAD, aLabelY);
+  ctx.fillStyle = "#3a3a3a"; ctx.font = bFont; y = aTop;
+  for (const ln of bLines) { ctx.fillText(ln, PAD, y); y += bLH; }
+  ctx.strokeStyle = "#e4e4e4"; ctx.beginPath(); ctx.moveTo(PAD, fRule); ctx.lineTo(W - PAD, fRule); ctx.stroke();
+  ctx.fillStyle = "#8a8a8a"; ctx.font = "400 20px 'Nanum Myeongjo',serif"; ctx.fillText("『나를 쓰는 시간』 장예원 · 한 줄의 기록이 삶을 바꾼다", PAD, fTop);
+  ctx.fillStyle = "#c85a2c"; ctx.font = "italic 700 22px 'Nanum Myeongjo',serif"; ctx.fillText("오늘의 기록이 내일의 나를 변화시킵니다.", PAD, fTop + 38);
+  return cv;
+}
+
+function strBytes(s) { const a = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) a[i] = s.charCodeAt(i) & 0xff; return a; }
+function canvasToPdfBlob(canvas) {
+  const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+  const bin = atob(dataUrl.split(",")[1]);
+  const jpeg = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) jpeg[i] = bin.charCodeAt(i);
+  const pxW = canvas.width, pxH = canvas.height;
+  const pageW = 595.28, pageH = +(pageW * pxH / pxW).toFixed(2);
+  const chunks = []; let len = 0; const offsets = [];
+  const push = (d) => { const b = typeof d === "string" ? strBytes(d) : d; chunks.push(b); len += b.length; };
+  const mark = () => offsets.push(len);
+  push("%PDF-1.3\n");
+  mark(); push("1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n");
+  mark(); push("2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n");
+  mark(); push(`3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageW} ${pageH}] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n`);
+  mark(); push(`4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${pxW} /Height ${pxH} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpeg.length} >>\nstream\n`);
+  push(jpeg); push("\nendstream\nendobj\n");
+  const content = `q ${pageW} 0 0 ${pageH} 0 0 cm /Im0 Do Q\n`;
+  mark(); push(`5 0 obj\n<< /Length ${content.length} >>\nstream\n${content}endstream\nendobj\n`);
+  const xrefOffset = len;
+  let xref = "xref\n0 6\n0000000000 65535 f \n";
+  for (const o of offsets) xref += String(o).padStart(10, "0") + " 00000 n \n";
+  push(xref);
+  push(`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`);
+  const total = new Uint8Array(len); let p = 0; for (const c of chunks) { total.set(c, p); p += c.length; }
+  return new Blob([total], { type: "application/pdf" });
+}
+
+const css = `
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@500;700;800&display=swap');
+.nss-root{ --paper:#1b2a4d; --paper2:#1f3057; --card:#243663; --ink:#f1ead8; --ink2:#aab3d0; --ink3:#828daf;
+  --line:rgba(241,234,216,.12); --line2:rgba(241,234,216,.24); --seal:#ed6a35; --seal2:#f3895c; --sky:#6fb0e0; --gold:#e0a24e;
+  font-family:'Gowun Batang','Nanum Myeongjo',serif; color:var(--ink); background:var(--paper);
+  min-height:100vh; width:100%; box-sizing:border-box; position:relative; overflow-x:hidden; }
+.nss-root *{box-sizing:border-box;}
+.nss-root::before{ content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.7;
+  background: radial-gradient(circle at 16% 8%, rgba(237,106,53,.10), transparent 36%),
+    radial-gradient(circle at 86% 82%, rgba(111,176,224,.10), transparent 42%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E"); }
+.nss-wrap{position:relative; z-index:1; max-width:760px; margin:0 auto; padding:0 20px 96px;}
+.nss-serif{font-family:'Nanum Myeongjo','Gowun Batang',serif;}
+.nss-fade{animation:nssFade .5s ease both;}
+@keyframes nssFade{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;}}
+.nss-stag>*{animation:nssFade .5s ease both;}
+.nss-btn{font-family:inherit; cursor:pointer; border:none; background:none; color:inherit;}
+.nss-tap{transition:transform .15s ease, background .2s ease, box-shadow .2s ease, border-color .2s ease;}
+.nss-tap:active{transform:scale(.985);}
+.nss-link{font-size:13px; color:var(--ink3); text-decoration:underline; text-underline-offset:3px; background:none; border:none; cursor:pointer; font-family:inherit;}
+.nss-link:hover{color:var(--seal);}
+
+.nss-onboard{max-width:460px; margin:0 auto; padding:46px 4px 0;}
+.nss-obctr{text-align:center;}
+.nss-obseal{width:62px; height:62px; border-radius:15px; background:linear-gradient(150deg,var(--seal),#d6512a); color:#fdf6ea; margin:0 auto 20px;
+  display:flex; align-items:center; justify-content:center; font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:30px; box-shadow:0 10px 28px rgba(237,106,53,.4);}
+.nss-obk{font-size:11.5px; letter-spacing:.34em; color:var(--seal2); font-weight:700; margin-bottom:13px;}
+.nss-obtitle{font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:30px; line-height:1.3; letter-spacing:-.5px; color:var(--ink);}
+.nss-subt{margin-top:12px; font-family:'Nanum Myeongjo',serif; font-size:15px; color:var(--sky); letter-spacing:.02em;}
+.nss-obsub{margin-top:14px; color:var(--ink2); font-size:14px; line-height:1.8;}
+.nss-flabel{font-size:12px; color:var(--ink2); margin:20px 2px 7px; letter-spacing:.04em;}
+.nss-input{width:100%; padding:14px 16px; border:1px solid var(--line2); border-radius:12px; background:var(--card);
+  font-family:'Nanum Myeongjo',serif; font-size:16px; color:var(--ink); outline:none;}
+.nss-input::placeholder{color:var(--ink3);}
+.nss-input:focus{border-color:var(--seal); box-shadow:0 0 0 3px rgba(237,106,53,.16);}
+.nss-clubopt{width:100%; text-align:left; display:flex; align-items:center; gap:12px; padding:14px 16px; border:1px solid var(--line2); border-radius:13px; background:var(--card); margin-bottom:9px;}
+.nss-clubopt.on{border-color:var(--seal); background:linear-gradient(170deg,#2a3d6e,var(--card)); box-shadow:0 4px 16px rgba(237,106,53,.18);}
+.nss-clubicon{width:34px; height:34px; border-radius:9px; flex:none; display:flex; align-items:center; justify-content:center; border:1px solid var(--line2); background:var(--paper2); color:var(--seal2);}
+.nss-clubname{font-family:'Nanum Myeongjo',serif; font-weight:700; font-size:15.5px;}
+.nss-clubtype{font-size:11.5px; color:var(--ink3); margin-top:2px; display:flex; align-items:center; gap:4px;}
+.nss-err{color:var(--seal2); font-size:12.5px; margin-top:8px;}
+.nss-privacy{margin-top:18px; font-size:11.5px; color:var(--ink3); line-height:1.7;}
+
+/* buy book banner */
+.nss-buy{margin-top:22px; border:1px solid var(--line2); border-radius:16px; overflow:hidden; background:linear-gradient(165deg,#22335f,#1c2b4f);}
+.nss-buybar{height:7px; background:linear-gradient(90deg,var(--seal),#c97a52 55%,var(--sky));}
+.nss-buyin{padding:18px 20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+.nss-buytxt{flex:1; min-width:180px;}
+.nss-buybook{font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:16px;}
+.nss-buymsg{font-family:'Nanum Myeongjo',serif; color:var(--sky); font-size:14px; margin-top:5px;}
+.nss-buysub{font-size:12px; color:var(--ink3); margin-top:6px; line-height:1.6;}
+.nss-buybtn{display:inline-flex; align-items:center; gap:7px; padding:11px 17px; border-radius:11px; background:var(--seal); color:#fdf6ea; font-size:13.5px; font-weight:700; text-decoration:none; box-shadow:0 6px 16px rgba(237,106,53,.3); white-space:nowrap;}
+.nss-buybtn:hover{background:#d6512a;}
+
+.nss-top{display:flex; align-items:center; justify-content:space-between; padding:24px 0 16px; gap:10px;}
+.nss-brand{display:flex; align-items:center; gap:11px; min-width:0;}
+.nss-seal{width:42px; height:42px; border-radius:9px; background:linear-gradient(150deg,var(--seal),#d6512a); color:#fdf6ea; flex:none; display:flex; align-items:center; justify-content:center; font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:19px; box-shadow:0 4px 14px rgba(237,106,53,.36);}
+.nss-bt{font-size:11px; color:var(--seal2); font-weight:700; display:flex; align-items:center; gap:5px;}
+.nss-bn{font-family:'Nanum Myeongjo',serif; font-size:18px; font-weight:800; letter-spacing:-.5px; line-height:1.1;}
+.nss-adtag{font-size:9.5px; padding:1px 6px; border-radius:99px; background:var(--gold); color:#1b2a4d; margin-left:6px; vertical-align:middle; font-weight:700;}
+.nss-hright{display:flex; align-items:center; gap:8px; flex:none;}
+.nss-navbtn{display:inline-flex; align-items:center; gap:6px; padding:9px 12px; border-radius:999px; border:1px solid var(--line2); background:var(--card); font-size:13px; color:var(--ink2);}
+.nss-navbtn:hover{border-color:var(--seal); color:var(--seal2);}
+
+.nss-hero{padding:14px 0 8px;}
+.nss-hk{font-size:12px; letter-spacing:.3em; color:var(--ink3); margin-bottom:14px;}
+.nss-htitle{font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:29px; line-height:1.34; letter-spacing:-.6px;}
+.nss-hsub{margin-top:14px; color:var(--ink2); font-size:15px; line-height:1.85;}
+.nss-prog{margin-top:24px; padding:18px 20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(180deg, var(--card), var(--paper2)); display:flex; align-items:center; gap:18px;}
+.nss-pbar{flex:1; height:8px; border-radius:99px; background:rgba(241,234,216,.13); overflow:hidden;}
+.nss-pfill{height:100%; background:linear-gradient(90deg,var(--seal),var(--sky)); border-radius:99px; transition:width .6s cubic-bezier(.2,.7,.2,1);}
+.nss-pnum{font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:17px; white-space:nowrap;}
+.nss-pnum small{color:var(--ink3); font-weight:400; font-size:13px;}
+.nss-pickrow{display:flex; gap:10px; margin-top:18px; flex-wrap:wrap;}
+.nss-cta{display:inline-flex; align-items:center; gap:9px; padding:13px 18px; border-radius:13px; background:var(--seal); color:#fdf6ea; font-size:14.5px; font-weight:700; box-shadow:0 6px 18px rgba(237,106,53,.3);}
+.nss-cta:hover{background:#d6512a;}
+.nss-cta:disabled{background:rgba(241,234,216,.12); color:var(--ink3); cursor:not-allowed; box-shadow:none;}
+.nss-cta.ghost{background:var(--card); color:var(--ink); border:1px solid var(--line2); box-shadow:none;}
+.nss-cta.ghost:hover{border-color:var(--seal); color:var(--seal2);}
+
+.nss-chap{margin-top:18px; border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--card);}
+.nss-chead{width:100%; text-align:left; display:flex; align-items:center; gap:15px; padding:17px 19px;}
+.nss-chead:hover{background:var(--paper2);}
+.nss-cidx{width:34px; height:34px; border-radius:9px; border:1px solid var(--line2); background:var(--paper2); flex:none; display:flex; align-items:center; justify-content:center; font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:15px; color:var(--seal2);}
+.nss-ctitle{font-family:'Nanum Myeongjo',serif; font-weight:700; font-size:16.5px; letter-spacing:-.3px;}
+.nss-csub{font-size:12.5px; color:var(--ink3); margin-top:3px;}
+.nss-ccount{margin-left:auto; font-size:12px; color:var(--ink2); white-space:nowrap;}
+.nss-qlist{border-top:1px solid var(--line); padding:6px 8px 10px;}
+.nss-qitem{width:100%; text-align:left; display:flex; align-items:flex-start; gap:12px; padding:12px; border-radius:10px;}
+.nss-qitem:hover{background:var(--paper2);}
+.nss-qnum{font-family:'Nanum Myeongjo',serif; font-size:12px; color:var(--ink3); width:30px; flex:none; padding-top:2px;}
+.nss-qtext{font-size:14.5px; line-height:1.6; color:var(--ink); flex:1;}
+.nss-dot{width:8px; height:8px; border-radius:99px; background:var(--seal); flex:none; margin-top:6px; box-shadow:0 0 0 3px rgba(237,106,53,.2);}
+.nss-dotghost{width:8px; height:8px; flex:none;}
+
+.nss-back{display:inline-flex; align-items:center; gap:5px; font-size:13.5px; color:var(--ink2); padding:8px 0; margin-top:16px;}
+.nss-back:hover{color:var(--seal2);}
+.nss-qcard{margin-top:8px; padding:30px 26px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(170deg,var(--card),var(--paper2));}
+.nss-qmeta{display:flex; align-items:center; gap:10px; font-size:12px; color:var(--ink3); margin-bottom:16px; flex-wrap:wrap;}
+.nss-chip{padding:3px 10px; border-radius:99px; border:1px solid var(--line2); background:var(--paper2); color:var(--ink2);}
+.nss-bigq{font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:23px; line-height:1.55; letter-spacing:-.4px;}
+.nss-label{display:flex; align-items:center; gap:8px; margin:26px 0 11px; font-size:13px; letter-spacing:.05em; color:var(--ink2);}
+.nss-label .ln{flex:1; height:1px; background:var(--line);}
+.nss-label .cnt{font-size:11.5px; color:var(--ink3); letter-spacing:0;}
+
+.nss-vis{display:flex; gap:7px; margin-bottom:9px; flex-wrap:wrap;}
+.nss-visbtn{display:inline-flex; align-items:center; gap:6px; padding:8px 13px; border-radius:99px; border:1px solid var(--line2); background:var(--card); font-size:13px; color:var(--ink2);}
+.nss-visbtn.on{border-color:var(--seal); background:var(--seal); color:#fdf6ea; box-shadow:0 4px 12px rgba(237,106,53,.26);}
+.nss-vishint{font-size:12px; color:var(--ink3); margin:0 2px 12px;}
+.nss-ta{width:100%; min-height:230px; resize:vertical; border:1px solid var(--line2); border-radius:14px; background:var(--paper2); padding:20px; font-family:'Gowun Batang','Nanum Myeongjo',serif; font-size:16px; line-height:2.05; color:var(--ink); outline:none; background-image:repeating-linear-gradient(transparent, transparent 40px, rgba(241,234,216,.08) 40px, rgba(241,234,216,.08) 41px);}
+.nss-ta::placeholder{color:var(--ink3);}
+.nss-ta:focus{border-color:var(--seal); box-shadow:0 0 0 3px rgba(237,106,53,.13);}
+.nss-meta2{display:flex; align-items:center; justify-content:space-between; margin-top:10px; font-size:12px; color:var(--ink3);}
+.nss-save{display:inline-flex; align-items:center; gap:5px; color:var(--sky);}
+.nss-gate{margin-top:26px; border:1px dashed var(--line2); border-radius:16px; padding:24px; text-align:center; background:var(--card);}
+.nss-glock{width:44px; height:44px; border-radius:12px; background:var(--paper2); border:1px solid var(--line2); margin:0 auto 13px; display:flex; align-items:center; justify-content:center; color:var(--ink3);}
+.nss-ghint{font-size:13.5px; color:var(--ink2); line-height:1.7; white-space:pre-line;}
+.nss-gbtn{margin-top:16px; display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:12px; background:var(--seal); color:#fdf6ea; font-weight:700; font-size:14.5px; box-shadow:0 6px 16px rgba(237,106,53,.3);}
+.nss-gbtn:disabled{background:rgba(241,234,216,.12); color:var(--ink3); cursor:not-allowed; box-shadow:none;}
+
+.nss-author{border:1px solid var(--line2); border-radius:14px; background:linear-gradient(165deg,#27396b,#20305a); padding:18px 18px; margin-bottom:11px;}
+.nss-akick{font-size:11px; letter-spacing:.22em; color:var(--seal2); font-weight:700; margin-bottom:9px; display:flex; align-items:center; gap:6px;}
+.nss-atitle{font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:18.5px; line-height:1.45; letter-spacing:-.3px;}
+.nss-atitle .quote{color:var(--seal2);}
+.nss-apage{margin-top:13px; display:inline-flex; align-items:center; gap:9px; padding:10px 15px; border-radius:11px; background:var(--paper); border:1px solid var(--line2); font-size:13.5px;}
+.nss-apage b{font-family:'Nanum Myeongjo',serif; color:var(--sky); font-size:15px;}
+.nss-abuy{margin-top:12px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:12px; color:var(--ink3);}
+.nss-abuylink{display:inline-flex; align-items:center; gap:5px; color:var(--seal2); text-decoration:none; font-weight:700;}
+.nss-abuylink:hover{text-decoration:underline;}
+
+.nss-peer{border:1px solid var(--line); border-radius:14px; background:var(--card); padding:16px 18px; margin-bottom:11px;}
+.nss-peer.me{border-color:var(--seal2); background:linear-gradient(170deg,#2a3d6e,var(--card));}
+.nss-peerhead{display:flex; align-items:center; gap:9px; margin-bottom:10px;}
+.nss-ava{width:28px; height:28px; border-radius:99px; background:var(--paper2); border:1px solid var(--line2); flex:none; display:flex; align-items:center; justify-content:center; font-family:'Nanum Myeongjo',serif; font-weight:700; font-size:13px; color:var(--seal2);}
+.nss-peerpen{font-family:'Nanum Myeongjo',serif; font-weight:700; font-size:14.5px;}
+.nss-tag{font-size:10.5px; padding:2px 7px; border-radius:99px; border:1px solid var(--line2); color:var(--ink3); display:inline-flex; align-items:center; gap:4px;}
+.nss-tag.pub{color:var(--gold); border-color:rgba(224,162,78,.5);}
+.nss-peertime{font-size:11.5px; color:var(--ink3); margin-left:auto;}
+.nss-peertext{font-size:14.5px; line-height:1.95; color:var(--ink); white-space:pre-wrap;}
+.nss-actions{display:flex; gap:7px; margin-top:12px; flex-wrap:wrap;}
+.nss-actbtn{display:inline-flex; align-items:center; gap:5px; font-size:12px; color:var(--ink2); padding:6px 11px; border:1px solid var(--line2); border-radius:99px; background:var(--paper2);}
+.nss-actbtn:hover{border-color:var(--seal); color:var(--seal2);}
+.nss-nopeer{text-align:center; padding:26px 16px; color:var(--ink3); font-size:13.5px; line-height:1.8; border:1px dashed var(--line2); border-radius:14px; background:var(--card);}
+.nss-tbar{display:flex; align-items:center; gap:8px; margin-top:13px; padding-top:12px; border-top:1px solid var(--line);}
+.nss-tbtn{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink2);}
+.nss-tbtn:hover{color:var(--seal2);}
+.nss-thread{margin-top:10px;}
+.nss-comment{display:flex; gap:9px; padding:9px 0;}
+.nss-cmeta{display:flex; align-items:center; gap:7px; margin-bottom:2px;}
+.nss-cpen{font-family:'Nanum Myeongjo',serif; font-weight:700; font-size:12.5px;}
+.nss-ctime{font-size:10.5px; color:var(--ink3);}
+.nss-ctext{font-size:13.5px; line-height:1.7; color:var(--ink); white-space:pre-wrap;}
+.nss-cbar{display:flex; gap:8px; margin-top:9px; align-items:flex-end;}
+.nss-cinput{flex:1; min-height:42px; max-height:120px; resize:none; border:1px solid var(--line2); border-radius:11px; background:var(--paper2); padding:10px 12px; font-family:'Gowun Batang',serif; font-size:13.5px; line-height:1.6; color:var(--ink); outline:none;}
+.nss-cinput::placeholder{color:var(--ink3);}
+.nss-cinput:focus{border-color:var(--seal); box-shadow:0 0 0 3px rgba(237,106,53,.13);}
+.nss-csend{flex:none; width:42px; height:42px; border-radius:11px; background:var(--seal); color:#fdf6ea; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(237,106,53,.3);}
+.nss-csend:disabled{background:rgba(241,234,216,.12); cursor:not-allowed; box-shadow:none; color:var(--ink3);}
+
+.nss-feed{border:1px solid var(--line); border-radius:14px; background:var(--card); padding:16px 18px; margin-bottom:11px; width:100%; text-align:left; display:block;}
+.nss-feed:hover{border-color:var(--seal2); background:var(--paper2);}
+.nss-feedq{font-family:'Nanum Myeongjo',serif; font-weight:700; font-size:15px; line-height:1.5;}
+.nss-feedmeta{display:flex; align-items:center; gap:9px; font-size:12px; color:var(--ink2); margin-top:10px; flex-wrap:wrap;}
+.nss-feedpens{color:var(--seal2); font-family:'Nanum Myeongjo',serif;}
+
+.nss-libcard{border:1px solid var(--line); border-radius:14px; background:var(--card); padding:18px; margin-bottom:12px;}
+.nss-libq{font-family:'Nanum Myeongjo',serif; font-weight:700; font-size:15.5px; line-height:1.55;}
+.nss-libsnip{font-size:13.5px; color:var(--ink2); line-height:1.8; margin-top:9px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; white-space:pre-wrap;}
+.nss-libmeta{display:flex; align-items:center; gap:10px; font-size:11.5px; color:var(--ink3); margin-top:11px; flex-wrap:wrap;}
+.nss-empty{text-align:center; padding:56px 20px; color:var(--ink3); line-height:1.9;}
+.nss-ov{position:fixed; inset:0; z-index:50; background:rgba(8,14,30,.62); display:flex; align-items:center; justify-content:center; padding:22px; animation:nssFade .25s ease both; overflow-y:auto;}
+.nss-modal{background:var(--paper); border:1px solid var(--line2); border-radius:18px; max-width:520px; width:100%; padding:24px; box-shadow:0 24px 60px rgba(0,0,0,.5); margin:auto;}
+.nss-mod-ta{width:100%; min-height:180px; border:1px solid var(--line2); border-radius:12px; background:var(--card); padding:14px; font-family:'Gowun Batang',serif; font-size:13px; line-height:1.7; color:var(--ink); resize:vertical;}
+.nss-seg{display:flex; gap:8px; margin-top:7px;}
+.nss-segbtn{flex:1; padding:11px; border-radius:11px; border:1px solid var(--line2); background:var(--card); font-size:13.5px; color:var(--ink2); display:inline-flex; align-items:center; justify-content:center; gap:6px;}
+.nss-segbtn.on{border-color:var(--seal); background:var(--seal); color:#fdf6ea;}
+.nss-adminrow{display:flex; align-items:center; gap:10px; padding:12px 14px; border:1px solid var(--line2); border-radius:12px; background:var(--card); margin-bottom:8px;}
+.nss-refresh{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--ink2); padding:6px 12px; border:1px solid var(--line2); border-radius:99px; background:var(--card);}
+.nss-refresh:hover{border-color:var(--seal); color:var(--seal2);}
+.nss-foot{text-align:center; padding:30px 0 8px; color:var(--ink3); font-size:11.5px; line-height:1.9;}
+`;
+
+function App() {
+  const [me, setMe] = useState(null);
+  const [boot, setBoot] = useState(false);
+  const [clubs, setClubs] = useState([]);
+  const [view, setView] = useState("home");
+  const [activeN, setActiveN] = useState(null);
+  const [openChap, setOpenChap] = useState(1);
+
+  const [obMode, setObMode] = useState("join");
+  const [penInput, setPenInput] = useState("");
+  const [selClub, setSelClub] = useState("");
+  const [clubPass, setClubPass] = useState("");
+  const [joinErr, setJoinErr] = useState("");
+  const [adminUnlocked, setAdminUnlocked] = useState(false);
+  const [adminCode, setAdminCode] = useState("");
+  const [adminErr, setAdminErr] = useState("");
+  const [ncName, setNcName] = useState(""); const [ncType, setNcType] = useState("open"); const [ncPass, setNcPass] = useState("");
+
+  const [myAnswered, setMyAnswered] = useState(() => new Set());
+  const [draft, setDraft] = useState(""); const [visDraft, setVisDraft] = useState("club");
+  const [peers, setPeers] = useState([]); const [myEntry, setMyEntry] = useState(null);
+  const [cmKeys, setCmKeys] = useState({}); const [thread, setThread] = useState({}); const [openT, setOpenT] = useState({}); const [cDraft, setCDraft] = useState({});
+  const [roomLoading, setRoomLoading] = useState(false);
+  const [feed, setFeed] = useState([]); const [feedLoading, setFeedLoading] = useState(false);
+  const [exportText, setExportText] = useState(null); const [copied, setCopied] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false); const [adminPanel, setAdminPanel] = useState(false);
+  const [freePosts, setFreePosts] = useState([]); const [freeLoading, setFreeLoading] = useState(false);
+  const [fTitle, setFTitle] = useState(""); const [fBody, setFBody] = useState(""); const [fVis, setFVis] = useState("club");
+  const saveTimer = useRef(null);
+  const canShare = typeof navigator !== "undefined" && !!navigator.share;
+
+  useEffect(() => { (async () => {
+    const s = await pGet(PKEY);
+    await reloadSheet(s && s.uid);
+    await ensureSeedClubs(); setClubs(await loadClubsArr());
+    if (s && s.pen) { setMe(s); if (s.role === "admin") setAdminUnlocked(true); await refreshAnswered(); }
+    setBoot(true);
+  })(); /* eslint-disable-next-line */ }, []);
+
+  const refreshClubs = async () => setClubs(await loadClubsArr());
+  const refreshAnswered = useCallback(async () => { const keys = await pList("mine:"); setMyAnswered(new Set(keys.map((k) => parseInt(k.split(":")[1], 10)))); }, []);
+
+  const join = async () => {
+    setJoinErr("");
+    const pen = penInput.trim().slice(0, 20); if (!pen) { setJoinErr("필명을 입력해 주세요."); return; }
+    const club = clubs.find((c) => c.id === selClub); if (!club) { setJoinErr("클럽을 선택해 주세요."); return; }
+    if (club.type === "secret" && clubPass.trim() !== (club.pass || "")) { setJoinErr("입장 비밀번호가 올바르지 않습니다."); return; }
+    const next = { uid: genId(), pen, clubId: club.id, clubName: club.name, clubType: club.type, role: adminUnlocked ? "admin" : "member" };
+    await pSet(PKEY, next); setMe(next); await refreshAnswered();
+  };
+  const createClub = async () => {
+    const name = ncName.trim().slice(0, 24); if (!name) return;
+    let id = slug(name); if (clubs.find((c) => c.id === id)) id = id + "-" + genId().slice(0, 4);
+    await gSet(`club:${id}`, { id, name, type: ncType, pass: ncType === "secret" ? ncPass.trim() : "", ts: Date.now(), createdBy: me ? me.uid : "admin" });
+    sheetPost("add", "클럽", { id: id, "클럽명": name, "유형": ncType, "비밀번호": ncType === "secret" ? ncPass.trim() : "", "날짜": nowISO() });
+    setNcName(""); setNcPass(""); setNcType("open"); await refreshClubs();
+  };
+  const deleteClub = async (id) => { if (!window.confirm("이 클럽을 삭제할까요? (이미 쓴 글은 남습니다)")) return; await gDel(`club:${id}`); await refreshClubs(); };
+
+  const answeredCount = myAnswered.size;
+  const active = activeN ? Q(activeN) : null;
+  const isUnlocked = (n) => me && me.unlocked && me.unlocked.includes(n);
+
+  const goWrite = async (n) => { setActiveN(n); setView("write"); window.scrollTo(0, 0); const e = await pGet(`mine:${pad(n)}`); setDraft(e && e.text ? e.text : ""); setVisDraft(e && e.vis ? e.vis : "club"); };
+  const goHome = () => { setView("home"); window.scrollTo(0, 0); };
+  const pickRandom = () => { const pool = QUESTIONS.filter((q) => !myAnswered.has(q.n)); const arr = pool.length ? pool : QUESTIONS; goWrite(arr[Math.floor(Math.random() * arr.length)].n); };
+
+  const persist = useCallback(async (n, text, vis) => {
+    const eKey = `e:${me.clubId}:${pad(n)}:${me.uid}`, pubKey = `pub:${pad(n)}:${me.uid}`;
+    if (!text.trim()) { await pDel(`mine:${pad(n)}`); await gDel(eKey); await gDel(pubKey); setMyAnswered((p) => { const s = new Set(p); s.delete(n); return s; }); return; }
+    await pSet(`mine:${pad(n)}`, { text, ts: Date.now(), vis });
+    sheetPost("update", "글", { id: `${me.uid}-${pad(n)}`, "유형": "질문", "질문번호": pad(n), "제목": (Q(n) ? Q(n).t : ""), "클럽": me.clubId, "필명": me.pen, "uid": me.uid, "공개범위": visK(vis), "내용": text, "날짜": nowISO() });
+    const payload = { uid: me.uid, pen: me.pen, clubId: me.clubId, text, ts: Date.now() };
+    if (vis === "club") { await gSet(eKey, payload); await gDel(pubKey); }
+    else if (vis === "public") { await gSet(pubKey, payload); await gDel(eKey); }
+    else { await gDel(eKey); await gDel(pubKey); }
+    setMyAnswered((p) => { const s = new Set(p); s.add(n); return s; });
+  }, [me]);
+
+  useEffect(() => {
+    if (view !== "write" || !active || !me) return;
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    const n = active.n, text = draft, vis = visDraft;
+    saveTimer.current = setTimeout(() => persist(n, text, vis), 500);
+  }, [draft, visDraft, view, active, me, persist]);
+
+  const loadRoom = useCallback(async (n) => {
+    setRoomLoading(true); await reloadSheet(me && me.uid);
+    const mineE = await pGet(`mine:${pad(n)}`); setMyEntry(mineE);
+    const map = {};
+    if (mineE && mineE.text && mineE.text.trim() && mineE.vis !== "private") {
+      for (const k of await gList(`e:${me.clubId}:${pad(n)}:`)) { const v = await gGet(k); if (v && v.uid !== me.uid && v.text && v.text.trim()) map[v.uid] = { ...v, vis: "club" }; }
+      for (const k of await gList(`pub:${pad(n)}:`)) { const v = await gGet(k); if (v && v.uid !== me.uid && v.text && v.text.trim()) map[v.uid] = { ...v, vis: "public" }; }
+    }
+    const list = Object.values(map).sort((a, b) => b.ts - a.ts); setPeers(list);
+    const targets = [me.uid, ...list.map((p) => p.uid)]; const idx = {};
+    (await gList(`cm:${pad(n)}:`)).forEach((k) => { const t = k.split(":")[2]; if (targets.includes(t)) (idx[t] = idx[t] || []).push(k); });
+    setCmKeys(idx); setThread({}); setOpenT({}); setRoomLoading(false);
+  }, [me]);
+
+  const enterRoom = async () => {
+    if (!active) return;
+    if (!isUnlocked(active.n)) { const next = { ...me, unlocked: [...(me.unlocked || []), active.n] }; await pSet(PKEY, next); setMe(next); }
+    setView("room"); window.scrollTo(0, 0); await loadRoom(active.n);
+  };
+  useEffect(() => { if (view !== "room" || !active) return; const t = setInterval(() => loadRoom(active.n), 15000); return () => clearInterval(t); }, [view, active, loadRoom]);
+
+  const loadFeed = useCallback(async () => {
+    setFeedLoading(true); await reloadSheet(me && me.uid); await refreshAnswered(); const map = {};
+    const ensure = (n) => map[n] || (map[n] = { n, others: new Set(), latest: 0, pens: [], iAnswered: false, mine: "" });
+    const add = (n, uid, ts, pen) => { const r = ensure(n); r.latest = Math.max(r.latest, ts || 0); if (uid !== me.uid) { r.others.add(uid); if (r.pens.length < 3 && pen && !r.pens.includes(pen)) r.pens.push(pen); } };
+    for (const k of await gList(`e:${me.clubId}:`)) { const p = k.split(":"); const v = await gGet(k); if (v && v.text && v.text.trim()) add(parseInt(p[2], 10), p[3], v.ts, v.pen); }
+    for (const k of await gList(`pub:`)) { const p = k.split(":"); const v = await gGet(k); if (v && v.text && v.text.trim()) add(parseInt(p[1], 10), p[2], v.ts, v.pen); }
+    for (const n of myAnswered) { const e = await pGet(`mine:${pad(n)}`); const r = ensure(n); r.iAnswered = true; if (e) { r.latest = Math.max(r.latest, e.ts || 0); r.mine = e.text || ""; } }
+    setFeed(Object.values(map).filter((r) => r.others.size > 0 || r.iAnswered).sort((a, b) => b.latest - a.latest)); setFeedLoading(false);
+  }, [me, myAnswered]);
+  const goFeed = async () => { setView("feed"); window.scrollTo(0, 0); await loadFeed(); };
+
+  const loadFreeBoard = useCallback(async () => {
+    setFreeLoading(true); await reloadSheet(me && me.uid); const map = {};
+    for (const k of await pList("freemine:")) { const pid = k.split(":")[1]; const e = await pGet(k); if (e && (e.text || "").trim()) map[pid] = { pid, title: e.title || "", text: e.text, ts: e.ts, vis: e.vis || "club", uid: me.uid, pen: me.pen }; }
+    for (const k of await gList(`fe:${me.clubId}:`)) { const pid = k.split(":")[2]; if (map[pid]) continue; const v = await gGet(k); if (v && (v.text || "").trim()) map[pid] = { ...v, pid, vis: "club" }; }
+    for (const k of await gList("fpub:")) { const pid = k.split(":")[1]; if (map[pid]) continue; const v = await gGet(k); if (v && (v.text || "").trim()) map[pid] = { ...v, pid, vis: "public" }; }
+    const idx = {}; (await gList("cmf:")).forEach((k) => { const pid = k.split(":")[1]; (idx[pid] = idx[pid] || []).push(k); });
+    setCmKeys(idx); setThread({}); setOpenT({});
+    setFreePosts(Object.values(map).sort((a, b) => b.ts - a.ts)); setFreeLoading(false);
+  }, [me]);
+  const goFreeBoard = async () => { setView("freeboard"); window.scrollTo(0, 0); await loadFreeBoard(); };
+  const goFreeWrite = () => { setFTitle(""); setFBody(""); setFVis("club"); setView("freewrite"); window.scrollTo(0, 0); };
+  const createFreePost = async () => {
+    const title = fTitle.trim().slice(0, 60); const text = fBody.trim();
+    if (!title || !text) return;
+    const pid = "F" + genId(); const ts = Date.now();
+    await pSet(`freemine:${pid}`, { title, text, ts, vis: fVis });
+    sheetPost("add", "글", { id: pid, "유형": "자유", "질문번호": "", "제목": title, "클럽": me.clubId, "필명": me.pen, "uid": me.uid, "공개범위": visK(fVis), "내용": text, "날짜": new Date(ts).toISOString() });
+    const payload = { pid, uid: me.uid, pen: me.pen, clubId: me.clubId, title, text, ts };
+    if (fVis === "club") await gSet(`fe:${me.clubId}:${pid}`, payload);
+    else if (fVis === "public") await gSet(`fpub:${pid}`, payload);
+    setView("freeboard"); window.scrollTo(0, 0); await loadFreeBoard();
+  };
+  const toggleThreadF = async (pid) => {
+    const willOpen = !openT[pid]; setOpenT((p) => ({ ...p, [pid]: willOpen }));
+    if (willOpen && !thread[pid]) { const arr = []; for (const k of (cmKeys[pid] || [])) { const v = await gGet(k); if (v) arr.push(v); } arr.sort((a, b) => a.ts - b.ts); setThread((p) => ({ ...p, [pid]: arr })); }
+  };
+  const sendCommentF = async (pid) => {
+    const text = (cDraft[pid] || "").trim(); if (!text) return;
+    const c = { id: genId(), uid: me.uid, pen: me.pen, text, ts: Date.now() };
+    await gSet(`cmf:${pid}:${c.id}`, c);
+    setThread((p) => ({ ...p, [pid]: [...(p[pid] || []), c] })); setCmKeys((p) => ({ ...p, [pid]: [...(p[pid] || []), "x"] })); setCDraft((p) => ({ ...p, [pid]: "" }));
+  };
+
+  const toggleThread = async (uid) => {
+    const willOpen = !openT[uid]; setOpenT((p) => ({ ...p, [uid]: willOpen }));
+    if (willOpen && !thread[uid]) { const arr = []; for (const k of (cmKeys[uid] || [])) { const v = await gGet(k); if (v) arr.push(v); } arr.sort((a, b) => a.ts - b.ts); setThread((p) => ({ ...p, [uid]: arr })); }
+  };
+  const sendComment = async (uid) => {
+    const text = (cDraft[uid] || "").trim(); if (!text || !active) return;
+    const c = { id: genId(), uid: me.uid, pen: me.pen, text, ts: Date.now() };
+    await gSet(`cm:${pad(active.n)}:${uid}:${c.id}`, c);
+    setThread((p) => ({ ...p, [uid]: [...(p[uid] || []), c] })); setCmKeys((p) => ({ ...p, [uid]: [...(p[uid] || []), "x"] })); setCDraft((p) => ({ ...p, [uid]: "" }));
+  };
+  const cCount = (uid) => (thread[uid] ? thread[uid].length : (cmKeys[uid] || []).length);
+
+  /* download / share */
+  const saveImage = async (entry) => { const cv = await drawEntryCanvas(entry); cv.toBlob((b) => { if (!b) return; const u = URL.createObjectURL(b); const a = document.createElement("a"); a.href = u; a.download = `나를쓰는시간_${entry.free ? "자유" : pad(entry.n)}_${entry.pen}.png`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 1000); }, "image/png"); };
+  const saveQuestionImage = async (arg) => { const free = typeof arg === "object" && arg && arg.free; const cv = await drawQuestionCard(arg); cv.toBlob((b) => { if (!b) return; const u = URL.createObjectURL(b); const a = document.createElement("a"); a.href = u; a.download = `나를쓰는시간_${free ? "자유_질문카드" : "질문" + pad(arg)}.png`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 1000); }, "image/png"); };
+  const savePDF = async (entry) => {
+    const cv = await drawDocCanvas(entry);
+    const blob = canvasToPdfBlob(cv);
+    const u = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = u; a.download = `나를쓰는시간_${entry.free ? "자유" : pad(entry.n)}_${entry.pen}.pdf`;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 1500);
+  };
+  const shareImage = async (entry) => {
+    const cv = await drawEntryCanvas(entry);
+    cv.toBlob(async (b) => { if (!b) return; const f = new File([b], `나를쓰는시간_${entry.free ? "자유" : pad(entry.n)}.png`, { type: "image/png" });
+      try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: "나를 쓰는 시간", text: "한 줄의 기록이 삶을 바꾼다 · 『나를 쓰는 시간』(장예원)" }); return; } } catch (e) {}
+      const u = URL.createObjectURL(b); const a = document.createElement("a"); a.href = u; a.download = f.name; a.click(); setTimeout(() => URL.revokeObjectURL(u), 1000);
+    }, "image/png");
+  };
+
+  const doExport = async () => {
+    const lines = ["『나를 쓰는 시간』 — " + (me ? me.pen : "") + "의 기록", "장예원 지음 · 한 줄의 기록이 삶을 바꾼다", ""];
+    for (const q of QUESTIONS) { if (!myAnswered.has(q.n)) continue; const e = await pGet(`mine:${pad(q.n)}`); if (e && e.text && e.text.trim()) { lines.push("────────────────────"); lines.push(`Q${pad(q.n)}. ${q.q}`); lines.push(`(${q.t} · p.${q.p} · ${VIS[e.vis || "club"].label})`); lines.push(""); lines.push(e.text.trim()); lines.push(""); } }
+    const text = lines.join("\n");
+    try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch { setExportText(text); }
+  };
+
+  const BuyBanner = () => (
+    <div className="nss-buy">
+      <div className="nss-buybar" />
+      <div className="nss-buyin">
+        <div className="nss-buytxt">
+          <div className="nss-buybook">『나를 쓰는 시간』 · 장예원</div>
+          <div className="nss-buymsg">한 줄의 기록이 삶을 바꾼다</div>
+          <div className="nss-buysub">이 100개의 질문은 장예원 작가의 책에서 왔습니다. 저자의 글과 함께 읽으면 더 깊어집니다.</div>
+        </div>
+        <a className="nss-buybtn nss-tap" href={BUY_URL} target="_blank" rel="noopener noreferrer"><BookOpen size={15} /> 책 구입하기 <ExternalLink size={13} /></a>
+      </div>
+    </div>
+  );
+
+  const actionsRow = (entry) => (
+    <div className="nss-actions">
+      <button className="nss-btn nss-actbtn nss-tap" onClick={() => saveImage(entry)}><Download size={13} /> 이미지</button>
+      <button className="nss-btn nss-actbtn nss-tap" onClick={() => savePDF(entry)}><FileText size={13} /> PDF</button>
+      {canShare && <button className="nss-btn nss-actbtn nss-tap" onClick={() => shareImage(entry)}><Share2 size={13} /> 공유</button>}
+    </div>
+  );
+
+  /* ───────── render ───────── */
+  const renderHome = () => (
+    <div className="nss-fade">
+      <div className="nss-hero">
+        <div className="nss-hk">100개의 질문 · 함께, 한 번에 하나씩</div>
+        <h1 className="nss-htitle">먼저 나를 쓰고,<br />서로의 글을 만납니다.</h1>
+        <p className="nss-hsub">질문을 고르고 나의 글을 먼저 씁니다. 클럽·전체로 공개하면 저자의 글과 친구들의 글이 함께 열리고, 각자의 글 아래에서 이야기를 나눕니다.</p>
+        <div className="nss-prog"><div className="nss-pnum">{answeredCount}<small> / 100</small></div><div className="nss-pbar"><div className="nss-pfill" style={{ width: `${answeredCount}%` }} /></div></div>
+        <div className="nss-pickrow">
+          <button className="nss-btn nss-cta nss-tap" onClick={pickRandom}><Shuffle size={16} /> 오늘의 질문 받기</button>
+          <button className="nss-btn nss-cta ghost nss-tap" onClick={() => { const el = document.getElementById("nss-ch"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}><BookOpen size={16} /> 직접 고르기</button>
+          <button className="nss-btn nss-cta ghost nss-tap" onClick={goFeed}><Sparkles size={16} /> 나와 친구들이 답한 질문</button>
+          <button className="nss-btn nss-cta ghost nss-tap" onClick={goFreeBoard}><Feather size={16} /> 자유롭게 쓰기</button>
+        </div>
+      </div>
+      <BuyBanner />
+      <div id="nss-ch" style={{ scrollMarginTop: 16, marginTop: 18 }}>
+        {CHAPTERS.map((c) => {
+          const qs = QUESTIONS.filter((q) => q.ch === c.id);
+          const done = qs.filter((q) => myAnswered.has(q.n)).length; const open = openChap === c.id;
+          return (
+            <div className="nss-chap" key={c.id}>
+              <button className="nss-btn nss-chead" onClick={() => setOpenChap(open ? 0 : c.id)}><span className="nss-cidx">{c.id}</span><span><div className="nss-ctitle">{c.title}</div><div className="nss-csub">{c.sub}</div></span><span className="nss-ccount">{done} / {qs.length}</span></button>
+              {open && (<div className="nss-qlist nss-stag">{qs.map((q, i) => (
+                <button className="nss-btn nss-qitem" key={q.n} style={{ animationDelay: `${i * 20}ms` }} onClick={() => goWrite(q.n)}><span className="nss-qnum">{String(q.n).padStart(2, "0")}</span><span className="nss-qtext">{q.q}</span>{myAnswered.has(q.n) ? <span className="nss-dot" /> : <span className="nss-dotghost" />}</button>))}</div>)}
+            </div>
+          );
+        })}
+      </div>
+      <div className="nss-foot">장예원 『나를 쓰는 시간』의 질문 100개를 위한 함께 쓰기 도구 · 프로토타입<br />저자의 에세이 본문은 담겨 있지 않습니다 · <a className="nss-abuylink" href={BUY_URL} target="_blank" rel="noopener noreferrer">원작 책 구입하기 →</a></div>
+    </div>
+  );
+
+  const renderFeed = () => (
+    <div className="nss-fade">
+      <button className="nss-btn nss-back" onClick={goHome}><ChevronLeft size={16} /> 처음으로</button>
+      <div className="nss-hero" style={{ paddingBottom: 4 }}><div className="nss-hk">{me.clubName}</div><h1 className="nss-htitle" style={{ fontSize: 25 }}>나와 친구들이 답한 질문</h1><p className="nss-hsub" style={{ fontSize: 14 }}>내가 답한 질문과 친구들이 글을 남긴 질문이에요. 눌러서 이어 쓰거나 함께 읽어 보세요.</p></div>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}><button className="nss-btn nss-refresh nss-tap" onClick={loadFeed}><RefreshCw size={12} /> 새로고침</button></div>
+      {feedLoading && feed.length === 0 ? <div className="nss-nopeer">불러오는 중…</div>
+        : feed.length === 0 ? <div className="nss-empty"><Sparkles size={24} style={{ opacity: .5 }} /><br /><br />아직 답한 질문이 없습니다.<br />가장 먼저 한 편을 남겨 보세요.</div>
+        : feed.map((r) => { const q = Q(r.n); return (
+          <button className="nss-btn nss-feed nss-tap" key={r.n} onClick={() => goWrite(r.n)}>
+            <div className="nss-feedq">{q.q}</div>
+            {r.iAnswered && r.mine && (
+              <div style={{ marginTop: 11, fontSize: 13.5, color: "var(--ink2)", lineHeight: 1.75, background: "var(--paper2)", border: "1px solid var(--line)", borderRadius: 10, padding: "10px 12px", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden", whiteSpace: "pre-wrap" }}>
+                <span style={{ color: "var(--seal2)", fontFamily: "'Nanum Myeongjo',serif", fontWeight: 700, fontSize: 12 }}>내 답변&nbsp;&nbsp;</span>{r.mine}
+              </div>
+            )}
+            <div className="nss-feedmeta">
+              <span className="nss-chip">{q.ch}장 · p.{q.p}</span>
+              {r.others.size > 0 && <span><Users size={11} style={{ verticalAlign: "-1px" }} /> 친구 {r.others.size}명</span>}
+              {r.pens.length > 0 && <span className="nss-feedpens">{r.pens.join(", ")}{r.others.size > r.pens.length ? " 외" : ""}</span>}
+              <span style={{ marginLeft: "auto", color: r.iAnswered ? "var(--sky)" : "var(--ink3)" }}>{r.iAnswered ? "✓ 내 글 있음" : "아직 안 씀"}</span>
+            </div>
+          </button>
+        ); })}
+    </div>
+  );
+
+  const renderWrite = () => {
+    const c = chapterOf(active.ch); const len = draft.trim().length; const ready = len >= MIN_LEN || isUnlocked(active.n);
+    return (
+      <div className="nss-fade">
+        <button className="nss-btn nss-back" onClick={goHome}><ChevronLeft size={16} /> 질문 목록으로</button>
+        <div className="nss-qcard"><div className="nss-qmeta"><span className="nss-chip">{c.title}</span><span>질문 {pad(active.n)} / 100</span></div><div className="nss-bigq">{active.q}</div></div>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 9 }}><button className="nss-btn nss-actbtn nss-tap" onClick={() => saveQuestionImage(active.n)}><Download size={13} /> 질문 카드 이미지 저장</button></div>
+        <div className="nss-label"><PenLine size={15} /> {me.pen}의 글 <span className="ln" /></div>
+        <div className="nss-vis">{Object.entries(VIS).map(([k, v]) => { const Ico = v.Icon; return (<button key={k} className={"nss-btn nss-visbtn nss-tap" + (visDraft === k ? " on" : "")} onClick={() => setVisDraft(k)}><Ico size={13} /> {v.label}</button>); })}</div>
+        <div className="nss-vishint">{visDraft === "club" ? `'${me.clubName}' 클럽 친구들에게 보입니다.` : visDraft === "public" ? "모든 참여자에게 보입니다." : "내 기기에만 저장됩니다 (친구들에게 보이지 않음)."}</div>
+        <textarea className="nss-ta" placeholder="떠오르는 대로, 천천히 적어 보세요…" value={draft} onChange={(e) => setDraft(e.target.value)} autoFocus />
+        <div className="nss-meta2"><span>{len}자</span>{len > 0 && <span className="nss-save"><Check size={12} /> 자동 저장됨</span>}</div>
+        <div className="nss-gate" style={ready ? { borderStyle: "solid", borderColor: "var(--line2)" } : {}}>
+          {!ready && <div className="nss-glock"><Lock size={20} /></div>}
+          <div className="nss-ghint">{!ready ? "먼저 나의 생각을 한 줄이라도 적어 보세요." : visDraft === "private" ? "비밀로 둔 글입니다.\n저자의 글을 읽으러 갈 수 있어요. 클럽·전체로 공개하면 친구들의 글이 열립니다." : "이제 다른 친구들이 쓴 글을 함께 읽을 수 있어요."}</div>
+          <button className="nss-btn nss-gbtn nss-tap" disabled={!ready} onClick={enterRoom}>{visDraft === "private" ? <><BookOpen size={16} /> 저자의 글 읽으러 가기</> : <><Users size={16} /> 다른 친구들이 쓴 글 함께 읽기</>}</button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderAuthorCard = () => (
+    <div className="nss-author">
+      <div className="nss-akick"><BookOpen size={12} /> 『나를 쓰는 시간』 장예원 · 저자의 글</div>
+      <div className="nss-atitle"><span className="quote">「</span>{active.t}<span className="quote">」</span></div>
+      <div className="nss-apage"><BookOpen size={15} style={{ color: "var(--sky)" }} /><span>책 <b>{active.p}쪽</b>을 펼쳐 읽어 보세요.</span></div>
+      <div className="nss-abuy"><span>한 줄의 기록이 삶을 바꾼다</span><a className="nss-abuylink" href={BUY_URL} target="_blank" rel="noopener noreferrer"><BookOpen size={12} /> 책 구입하기 <ExternalLink size={11} /></a></div>
+    </div>
+  );
+
+  const renderEntryCard = (entry, isMe) => {
+    const uid = isMe ? me.uid : entry.uid;
+    const pen = isMe ? me.pen : entry.pen;
+    const text = isMe ? (myEntry ? myEntry.text : draft) : entry.text;
+    const ts = isMe ? (myEntry ? myEntry.ts : Date.now()) : entry.ts;
+    const isPub = !isMe && entry.vis === "public";
+    const canDownload = isMe || me.role === "admin";
+    const dlEntry = { pen, n: active.n, text, ts };
+    return (
+      <div className={"nss-peer" + (isMe ? " me" : "")} key={uid}>
+        <div className="nss-peerhead"><span className="nss-ava">{(pen || "?").slice(0, 1)}</span><span className="nss-peerpen">{pen}{isMe ? " (나)" : ""}</span>{isPub && <span className="nss-tag pub"><Globe size={10} /> 전체</span>}<span className="nss-peertime">{relTime(ts)}</span></div>
+        <div className="nss-peertext">{text}</div>
+        {canDownload && actionsRow(dlEntry)}
+        {COMMENTS_ENABLED && (<>
+        <div className="nss-tbar"><button className="nss-btn nss-tbtn nss-tap" onClick={() => toggleThread(uid)}><MessageCircle size={14} /> {isMe ? "댓글" : "친구의 글을 읽고 댓글 달기"} {cCount(uid) > 0 ? cCount(uid) : ""}<ChevronDown size={13} style={{ transform: openT[uid] ? "rotate(180deg)" : "none", transition: "transform .2s" }} /></button></div>
+        {openT[uid] && (
+          <div className="nss-thread">
+            {(thread[uid] || []).map((cm) => (
+              <div className="nss-comment" key={cm.id}><span className="nss-ava" style={{ width: 24, height: 24, fontSize: 11 }}>{(cm.pen || "?").slice(0, 1)}</span><div style={{ flex: 1 }}><div className="nss-cmeta"><span className="nss-cpen">{cm.pen}{cm.uid === me.uid ? " (나)" : ""}</span><span className="nss-ctime">{relTime(cm.ts)}</span></div><div className="nss-ctext">{cm.text}</div></div></div>
+            ))}
+            {(!thread[uid] || thread[uid].length === 0) && <div style={{ fontSize: 12.5, color: "var(--ink3)", padding: "6px 0" }}>{isMe ? "친구들이 남길 한마디를 기다리는 중이에요." : "이 글을 읽고 따뜻한 한마디를 건네 보세요."}</div>}
+            <div className="nss-cbar"><textarea className="nss-cinput" placeholder="한마디 남기기…" value={cDraft[uid] || ""} onChange={(e) => setCDraft((p) => ({ ...p, [uid]: e.target.value }))} onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) sendComment(uid); }} /><button className="nss-btn nss-csend nss-tap" disabled={!(cDraft[uid] || "").trim()} onClick={() => sendComment(uid)}><Send size={16} /></button></div>
+          </div>
+        )}
+        </>)}
+      </div>
+    );
+  };
+
+  const renderRoom = () => {
+    const c = chapterOf(active.ch); const isPrivate = myEntry && myEntry.vis === "private";
+    return (
+      <div className="nss-fade">
+        <button className="nss-btn nss-back" onClick={() => { setView("write"); window.scrollTo(0, 0); }}><ChevronLeft size={16} /> 나의 글로 돌아가기</button>
+        <div className="nss-qcard" style={{ padding: "22px 24px" }}><div className="nss-qmeta"><span className="nss-chip">{c.id}장 · p.{active.p}</span><span>질문 {pad(active.n)}</span></div><div className="nss-bigq" style={{ fontSize: 19 }}>{active.q}</div></div>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 9 }}><button className="nss-btn nss-actbtn nss-tap" onClick={() => saveQuestionImage(active.n)}><Download size={13} /> 질문 카드 이미지 저장</button></div>
+        <div className="nss-label"><Users size={15} /> 글 모음 {!isPrivate && <span className="cnt">나 + {peers.length}명</span>}<span className="ln" />{!isPrivate && <button className="nss-btn nss-refresh nss-tap" onClick={() => loadRoom(active.n)}><RefreshCw size={12} /> 새로고침</button>}</div>
+        {renderAuthorCard()}
+        {myEntry && renderEntryCard(myEntry, true)}
+        {isPrivate ? (
+          <div className="nss-nopeer" style={{ marginTop: 4 }}>이 글은 <b>나만 보기</b>로 두었어요.<br />나의 글로 돌아가 <b>클럽 공개</b>로 바꾸면 친구들의 글이 열립니다.</div>
+        ) : roomLoading && peers.length === 0 ? <div className="nss-nopeer">불러오는 중…</div>
+          : peers.length === 0 ? <div className="nss-nopeer">아직 이 질문에 글을 남긴 친구가 없습니다.<br />먼저 도착하셨네요. 잠시 후 새로고침하면 보일 거예요.</div>
+          : peers.map((p) => renderEntryCard(p, false))}
+      </div>
+    );
+  };
+
+  const renderLibrary = () => {
+    const written = QUESTIONS.filter((q) => myAnswered.has(q.n));
+    return (
+      <div className="nss-fade">
+        <button className="nss-btn nss-back" onClick={goHome}><ChevronLeft size={16} /> 처음으로</button>
+        <div className="nss-hero" style={{ paddingBottom: 4 }}><div className="nss-hk">{me.pen} · {me.clubName}</div><h1 className="nss-htitle" style={{ fontSize: 26 }}>지금까지 쓴 {written.length}편의 글</h1></div>
+        {written.length > 0 && <button className="nss-btn nss-cta nss-tap" style={{ margin: "6px 0 22px" }} onClick={doExport}><Copy size={16} /> {copied ? "복사되었습니다" : "내 글 전체 복사하기"}</button>}
+        {written.length === 0 ? <div className="nss-empty"><Feather size={26} style={{ opacity: .5 }} /><br /><br />아직 쓴 글이 없습니다.<br />질문 하나를 골라 첫 문장을 남겨 보세요.</div>
+          : written.map((q) => <LibItem key={q.n} q={q} pen={me.pen} onOpen={() => goWrite(q.n)} onImg={saveImage} onPdf={savePDF} onShare={canShare ? shareImage : null} />)}
+      </div>
+    );
+  };
+
+  const renderFreeCard = (p) => {
+    const isMe = p.uid === me.uid; const isPub = p.vis === "public";
+    const canDownload = isMe || me.role === "admin";
+    const dl = { free: true, title: p.title, text: p.text, ts: p.ts, pen: p.pen };
+    return (
+      <div className={"nss-peer" + (isMe ? " me" : "")} key={p.pid}>
+        <div className="nss-peerhead"><span className="nss-ava">{(p.pen || "?").slice(0, 1)}</span><span className="nss-peerpen">{p.pen}{isMe ? " (나)" : ""}</span>{isPub && <span className="nss-tag pub"><Globe size={10} /> 전체</span>}{p.vis === "private" && <span className="nss-tag"><Lock size={10} /> 나만</span>}<span className="nss-peertime">{relTime(p.ts)}</span></div>
+        <div className="nss-libq" style={{ marginBottom: 4 }}>{p.title}</div>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}><button className="nss-btn nss-actbtn nss-tap" onClick={() => saveQuestionImage({ free: true, title: p.title, pen: p.pen })}><Download size={13} /> 질문 카드 이미지 저장</button></div>
+        <div className="nss-peertext">{p.text}</div>
+        {canDownload && actionsRow(dl)}
+        {COMMENTS_ENABLED && (<>
+        <div className="nss-tbar"><button className="nss-btn nss-tbtn nss-tap" onClick={() => toggleThreadF(p.pid)}><MessageCircle size={14} /> {isMe ? "댓글" : "친구의 글을 읽고 댓글 달기"} {cCount(p.pid) > 0 ? cCount(p.pid) : ""}<ChevronDown size={13} style={{ transform: openT[p.pid] ? "rotate(180deg)" : "none", transition: "transform .2s" }} /></button></div>
+        {openT[p.pid] && (
+          <div className="nss-thread">
+            {(thread[p.pid] || []).map((cm) => (
+              <div className="nss-comment" key={cm.id}><span className="nss-ava" style={{ width: 24, height: 24, fontSize: 11 }}>{(cm.pen || "?").slice(0, 1)}</span><div style={{ flex: 1 }}><div className="nss-cmeta"><span className="nss-cpen">{cm.pen}{cm.uid === me.uid ? " (나)" : ""}</span><span className="nss-ctime">{relTime(cm.ts)}</span></div><div className="nss-ctext">{cm.text}</div></div></div>
+            ))}
+            {(!thread[p.pid] || thread[p.pid].length === 0) && <div style={{ fontSize: 12.5, color: "var(--ink3)", padding: "6px 0" }}>{isMe ? "친구들이 남길 한마디를 기다리는 중이에요." : "이 글을 읽고 따뜻한 한마디를 건네 보세요."}</div>}
+            <div className="nss-cbar"><textarea className="nss-cinput" placeholder="한마디 남기기…" value={cDraft[p.pid] || ""} onChange={(e) => setCDraft((x) => ({ ...x, [p.pid]: e.target.value }))} onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) sendCommentF(p.pid); }} /><button className="nss-btn nss-csend nss-tap" disabled={!(cDraft[p.pid] || "").trim()} onClick={() => sendCommentF(p.pid)}><Send size={16} /></button></div>
+          </div>
+        )}
+        </>)}
+      </div>
+    );
+  };
+
+  const renderFreeBoard = () => (
+    <div className="nss-fade">
+      <button className="nss-btn nss-back" onClick={goHome}><ChevronLeft size={16} /> 처음으로</button>
+      <div className="nss-hero" style={{ paddingBottom: 4 }}><div className="nss-hk">{me.clubName} · 자유롭게 쓰기</div><h1 className="nss-htitle" style={{ fontSize: 25 }}>자유 글</h1><p className="nss-hsub" style={{ fontSize: 14 }}>질문의 틀 없이 자유롭게 남긴 글들이에요.</p></div>
+      <div className="nss-pickrow" style={{ justifyContent: "space-between", alignItems: "center" }}>
+        <button className="nss-btn nss-cta nss-tap" onClick={goFreeWrite}><PenLine size={16} /> 새 자유 글 쓰기</button>
+        <button className="nss-btn nss-refresh nss-tap" onClick={loadFreeBoard}><RefreshCw size={12} /> 새로고침</button>
+      </div>
+      <div style={{ marginTop: 18 }}>
+        {freeLoading && freePosts.length === 0 ? <div className="nss-nopeer">불러오는 중…</div>
+          : freePosts.length === 0 ? <div className="nss-empty"><Feather size={26} style={{ opacity: .5 }} /><br /><br />아직 자유 글이 없습니다.<br />가장 먼저 한 편을 남겨 보세요.</div>
+          : freePosts.map((p) => renderFreeCard(p))}
+      </div>
+    </div>
+  );
+
+  const renderFreeWrite = () => (
+    <div className="nss-fade">
+      <button className="nss-btn nss-back" onClick={() => { setView("freeboard"); window.scrollTo(0, 0); }}><ChevronLeft size={16} /> 자유 글 목록으로</button>
+      <div className="nss-hero" style={{ paddingBottom: 4 }}><div className="nss-hk">자유롭게 쓰기</div><h1 className="nss-htitle" style={{ fontSize: 25 }}>질문 없이, 오늘의 나를 적어요</h1><p className="nss-hsub" style={{ fontSize: 14 }}>제목을 달고 떠오르는 대로 적어 보세요. 100개의 질문이 아니어도 괜찮습니다.</p></div>
+      <div className="nss-flabel" style={{ marginTop: 18 }}>제목</div>
+      <input className="nss-input" placeholder="한 줄 제목 (예: 오늘 새벽 낭독에서)" maxLength={60} value={fTitle} onChange={(e) => setFTitle(e.target.value)} autoFocus />
+      <div className="nss-flabel" style={{ marginTop: 16 }}>공개 범위</div>
+      <div className="nss-vis">{Object.entries(VIS).map(([k, v]) => { const Ico = v.Icon; return (<button key={k} className={"nss-btn nss-visbtn nss-tap" + (fVis === k ? " on" : "")} onClick={() => setFVis(k)}><Ico size={13} /> {v.label}</button>); })}</div>
+      <div className="nss-vishint">{fVis === "club" ? `'${me.clubName}' 클럽 친구들에게 보입니다.` : fVis === "public" ? "모든 참여자에게 보입니다." : "내 기기에만 저장됩니다 (친구들에게 보이지 않음)."}</div>
+      <textarea className="nss-ta" placeholder="떠오르는 대로, 천천히 적어 보세요…" value={fBody} onChange={(e) => setFBody(e.target.value)} />
+      <div className="nss-meta2"><span>{fBody.trim().length}자</span></div>
+      <div className="nss-pickrow"><button className="nss-btn nss-cta nss-tap" disabled={!fTitle.trim() || !fBody.trim()} onClick={createFreePost}><Feather size={16} /> 자유 글 남기기</button></div>
+    </div>
+  );
+
+  const renderAdminPanel = (inModal) => (
+    <div className={inModal ? "" : "nss-onboard nss-fade"}>
+      {!adminUnlocked ? (
+        <div className={inModal ? "" : "nss-obctr"}>
+          {!inModal && <><div className="nss-obseal"><ShieldCheck size={28} /></div><div className="nss-obk">관리자 모드</div><h1 className="nss-obtitle">클럽 관리</h1></>}
+          <div className="nss-flabel">관리자 코드</div>
+          <input className="nss-input" type="password" placeholder="관리자 코드" value={adminCode} onChange={(e) => setAdminCode(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { if (adminCode === ADMIN_CODE) { setAdminUnlocked(true); setAdminErr(""); } else setAdminErr("코드가 올바르지 않습니다."); } }} autoFocus />
+          {adminErr && <div className="nss-err">{adminErr}</div>}
+          <div className="nss-pickrow"><button className="nss-btn nss-cta nss-tap" onClick={() => { if (adminCode === ADMIN_CODE) { setAdminUnlocked(true); setAdminErr(""); } else setAdminErr("코드가 올바르지 않습니다."); }}><Unlock size={15} /> 잠금 해제</button>{!inModal && <button className="nss-btn nss-cta ghost nss-tap" onClick={() => setObMode("join")}>뒤로</button>}</div>
+        </div>
+      ) : (
+        <div>
+          {!inModal && <div className="nss-obctr"><div className="nss-obseal"><ShieldCheck size={28} /></div><div className="nss-obk">관리자 모드</div><h1 className="nss-obtitle">클럽 관리</h1></div>}
+          <div className="nss-flabel" style={{ marginTop: inModal ? 4 : 24 }}>새 클럽 만들기</div>
+          <input className="nss-input" placeholder="클럽 이름" maxLength={24} value={ncName} onChange={(e) => setNcName(e.target.value)} />
+          <div className="nss-seg"><button className={"nss-btn nss-segbtn nss-tap" + (ncType === "open" ? " on" : "")} onClick={() => setNcType("open")}><Globe size={14} /> 오픈 클럽</button><button className={"nss-btn nss-segbtn nss-tap" + (ncType === "secret" ? " on" : "")} onClick={() => setNcType("secret")}><Lock size={14} /> 비밀 클럽</button></div>
+          {ncType === "secret" && <input className="nss-input" style={{ marginTop: 9 }} placeholder="입장 비밀번호" value={ncPass} onChange={(e) => setNcPass(e.target.value)} />}
+          <div className="nss-pickrow"><button className="nss-btn nss-cta nss-tap" disabled={!ncName.trim() || (ncType === "secret" && !ncPass.trim())} onClick={createClub}><Plus size={15} /> 클럽 생성</button></div>
+          <div className="nss-flabel" style={{ marginTop: 22 }}>현재 클럽 ({clubs.length})</div>
+          {clubs.map((c) => (
+            <div className="nss-adminrow" key={c.id}><span className="nss-clubicon" style={{ width: 30, height: 30 }}>{c.type === "secret" ? <Lock size={14} /> : <Globe size={14} />}</span><span style={{ flex: 1 }}><div className="nss-clubname" style={{ fontSize: 14.5 }}>{c.name}</div><div className="nss-clubtype">{c.type === "secret" ? `비밀 클럽 · 비번 ${c.pass}` : "오픈 클럽"}{c.seed ? " · 시범" : ""}</div></span><button className="nss-btn nss-tap" style={{ color: "var(--ink3)" }} onClick={() => deleteClub(c.id)} aria-label="삭제"><Trash2 size={16} /></button></div>
+          ))}
+          {!inModal && <div className="nss-pickrow"><button className="nss-btn nss-cta nss-tap" onClick={() => setObMode("join")}>완료 · 입장하기</button></div>}
+          {inModal && <p className="nss-privacy">⚠️ 비밀번호·관리자 코드는 프로토타입상 화면에 저장되어 진짜 보안은 아닙니다.</p>}
+        </div>
+      )}
+    </div>
+  );
+
+  if (boot && !me) {
+    if (obMode === "admin") return (<div className="nss-root"><style>{css}</style><div className="nss-wrap">{renderAdminPanel(false)}</div></div>);
+    const selected = clubs.find((c) => c.id === selClub);
+    return (
+      <div className="nss-root"><style>{css}</style>
+        <div className="nss-wrap"><div className="nss-onboard nss-fade">
+          <div className="nss-obctr"><div className="nss-obseal">作</div><div className="nss-obk">함께 쓰는 글쓰기 모임</div><h1 className="nss-obtitle">나를 쓰는 시간</h1><div className="nss-subt">한 줄의 기록이 삶을 바꾼다</div><p className="nss-obsub">필명을 정하고, 참여할 클럽을 골라 입장하세요.</p></div>
+          <BuyBanner />
+          <div className="nss-flabel" style={{ marginTop: 22 }}>필명</div>
+          <input className="nss-input" placeholder="불릴 이름" maxLength={20} value={penInput} onChange={(e) => setPenInput(e.target.value)} />
+          <div className="nss-flabel" style={{ marginTop: 22 }}>클럽 선택</div>
+          {clubs.length === 0 && <div className="nss-nopeer">아직 클럽이 없습니다. 관리자가 먼저 만들어야 해요.</div>}
+          {clubs.map((c) => (
+            <button key={c.id} className={"nss-btn nss-clubopt nss-tap" + (selClub === c.id ? " on" : "")} onClick={() => { setSelClub(c.id); setClubPass(""); setJoinErr(""); }}>
+              <span className="nss-clubicon">{c.type === "secret" ? <Lock size={16} /> : <Globe size={16} />}</span>
+              <span style={{ flex: 1 }}><div className="nss-clubname">{c.name}</div><div className="nss-clubtype">{c.type === "secret" ? <><Lock size={11} /> 비밀 클럽 · 입장 비밀번호 필요</> : <><Globe size={11} /> 오픈 클럽 · 누구나 입장</>}</div></span>
+              {selClub === c.id && <Check size={18} style={{ color: "var(--seal2)" }} />}
+            </button>
+          ))}
+          {selected && selected.type === "secret" && (<><div className="nss-flabel" style={{ marginTop: 8 }}>입장 비밀번호</div><input className="nss-input" type="password" placeholder="비밀번호" value={clubPass} onChange={(e) => setClubPass(e.target.value)} onKeyDown={(e) => e.key === "Enter" && join()} /></>)}
+          {joinErr && <div className="nss-err">{joinErr}</div>}
+          <div className="nss-pickrow"><button className="nss-btn nss-cta nss-tap" disabled={!penInput.trim() || !selClub} onClick={join}><Feather size={16} /> 입장하기</button></div>
+          <div style={{ marginTop: 16, textAlign: "center" }}><button className="nss-link" onClick={() => { setObMode("admin"); setAdminErr(""); }}>관리자 모드 · 클럽 만들기</button></div>
+          <p className="nss-privacy"><b>나만 보기</b> 글은 이 기기에만 저장됩니다. <b>클럽/전체 공개</b> 글·댓글은 같은 공간 친구들에게 보입니다. 필명으로만 표시되니 안전하게 적어 주세요.</p>
+        </div></div>
+      </div>
+    );
+  }
+  if (!boot) return (<div className="nss-root"><style>{css}</style><div className="nss-wrap"><div className="nss-empty">불러오는 중…</div></div></div>);
+
+  return (
+    <>
+      <div className="nss-root"><style>{css}</style>
+        <div className="nss-wrap">
+          <div className="nss-top">
+            <button className="nss-btn nss-brand" onClick={goHome}><span className="nss-seal">作</span><span style={{ textAlign: "left", minWidth: 0 }}><div className="nss-bt">{me.clubType === "secret" ? <Lock size={11} /> : <Users size={11} />} {me.clubName}{me.role === "admin" && <span className="nss-adtag">관리자</span>}</div><div className="nss-bn">나를 쓰는 시간</div></span></button>
+            <div className="nss-hright"><button className="nss-btn nss-navbtn nss-tap" onClick={() => { setPenInput(me.pen); setAdminPanel(false); setSettingsOpen(true); }} aria-label="설정"><Settings size={15} /></button><button className="nss-btn nss-navbtn nss-tap" onClick={() => { setView("library"); window.scrollTo(0, 0); }}><Library size={15} /> {answeredCount > 0 && <span style={{ color: "var(--seal2)", fontWeight: 700 }}>{answeredCount}</span>}</button></div>
+          </div>
+          {view === "home" && renderHome()}
+          {view === "feed" && renderFeed()}
+          {view === "freeboard" && renderFreeBoard()}
+          {view === "freewrite" && renderFreeWrite()}
+          {view === "write" && active && renderWrite()}
+          {view === "room" && active && renderRoom()}
+          {view === "library" && renderLibrary()}
+        </div>
+
+        {settingsOpen && (
+          <div className="nss-ov" onClick={() => setSettingsOpen(false)}>
+            <div className="nss-modal" onClick={(e) => e.stopPropagation()}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}><strong className="nss-serif" style={{ fontSize: 16 }}>{adminPanel ? "클럽 관리" : "설정"}</strong><button className="nss-btn nss-tap" onClick={() => setSettingsOpen(false)}><X size={18} /></button></div>
+              {adminPanel ? renderAdminPanel(true) : (
+                <>
+                  <div className="nss-flabel">필명</div>
+                  <input className="nss-input" maxLength={20} value={penInput} onChange={(e) => setPenInput(e.target.value)} autoFocus />
+                  <div className="nss-flabel" style={{ marginTop: 16 }}>현재 클럽</div>
+                  <div className="nss-adminrow"><span className="nss-clubicon" style={{ width: 30, height: 30 }}>{me.clubType === "secret" ? <Lock size={14} /> : <Globe size={14} />}</span><span className="nss-clubname" style={{ fontSize: 14.5 }}>{me.clubName}</span></div>
+                  <p className="nss-privacy">클럽을 바꾸려면 로그아웃 후 다시 선택하세요.</p>
+                  <div className="nss-pickrow" style={{ justifyContent: "space-between" }}>
+                    <button className="nss-link" onClick={() => { setAdminPanel(true); setAdminErr(""); }}>관리자 모드</button>
+                    <span style={{ display: "flex", gap: 10 }}>
+                      <button className="nss-btn nss-cta ghost nss-tap" onClick={async () => { await pDel(PKEY); setMe(null); setSettingsOpen(false); setSelClub(""); setObMode("join"); }}>로그아웃</button>
+                      <button className="nss-btn nss-cta nss-tap" disabled={!penInput.trim()} onClick={async () => { const next = { ...me, pen: penInput.trim().slice(0, 20) }; await pSet(PKEY, next); setMe(next); setSettingsOpen(false); }}>저장</button>
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {exportText !== null && (
+          <div className="nss-ov" onClick={() => setExportText(null)}>
+            <div className="nss-modal" onClick={(e) => e.stopPropagation()}><div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}><strong className="nss-serif" style={{ fontSize: 16 }}>아래 글을 직접 복사하세요</strong><button className="nss-btn nss-tap" onClick={() => setExportText(null)}><X size={18} /></button></div><textarea className="nss-mod-ta" readOnly value={exportText} onFocus={(e) => e.target.select()} /></div>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+function LibItem({ q, pen, onOpen, onImg, onPdf, onShare }) {
+  const [snip, setSnip] = useState(""); const [ts, setTs] = useState(null); const [vis, setVis] = useState("club");
+  useEffect(() => { (async () => { const e = await pGet(`mine:${pad(q.n)}`); if (e) { setSnip(e.text || ""); setTs(e.ts); setVis(e.vis || "club"); } })(); }, [q.n]);
+  const V = VIS[vis] || VIS.club; const Ico = V.Icon; const dl = { pen, n: q.n, text: snip, ts };
+  return (
+    <div className="nss-libcard nss-fade">
+      <div className="nss-libq">{q.q}</div>
+      <div className="nss-libsnip">{snip}</div>
+      <div className="nss-actions">
+        <button className="nss-btn nss-actbtn nss-tap" onClick={() => onImg(dl)}><Download size={13} /> 이미지</button>
+        <button className="nss-btn nss-actbtn nss-tap" onClick={() => onPdf(dl)}><FileText size={13} /> PDF</button>
+        {onShare && <button className="nss-btn nss-actbtn nss-tap" onClick={() => onShare(dl)}><Share2 size={13} /> 공유</button>}
+      </div>
+      <div className="nss-libmeta"><span className="nss-chip">{q.ch}장 · p.{q.p}</span><span className="nss-tag"><Ico size={10} /> {V.label}</span><span>{ts ? relTime(ts) : ""}</span><button className="nss-btn nss-tap" style={{ marginLeft: "auto", color: "var(--ink2)", fontSize: 12 }} onClick={onOpen}>이어 쓰기 · 함께 읽기</button></div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+</script>
+</body>
+</html>
