@@ -310,6 +310,27 @@ function wrapLines(ctx, text, maxW) {
   }
   return out;
 }
+function wrapWords(ctx, text, maxW) {
+  const out = []; const paras = (text || "").split(/\n/);
+  for (const para of paras) {
+    if (para === "") { out.push(""); continue; }
+    const tokens = para.split(" ");
+    let line = "";
+    for (const w of tokens) {
+      const cand = line ? line + " " + w : w;
+      if (ctx.measureText(cand).width > maxW && line) {
+        out.push(line);
+        if (ctx.measureText(w).width > maxW) { // 한 어절이 너무 길면 그 어절만 글자 단위로
+          let piece = "";
+          for (const ch of w) { const t = piece + ch; if (ctx.measureText(t).width > maxW && piece) { out.push(piece); piece = ch; } else piece = t; }
+          line = piece;
+        } else line = w;
+      } else line = cand;
+    }
+    if (line) out.push(line);
+  }
+  return out;
+}
 async function drawEntryCanvas(entry) {
   try { if (document.fonts) await document.fonts.ready; } catch (e) {}
   const free = !!entry.free; const q = free ? null : Q(entry.n);
@@ -317,7 +338,7 @@ async function drawEntryCanvas(entry) {
   const qFont = "800 44px 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif", bFont = "400 36px 'Gowun Batang','Nanum Myeongjo', serif";
   const qPad = PAD + 44, qContentW = W - qPad * 2;
   const tmp = document.createElement("canvas").getContext("2d");
-  tmp.font = qFont; const qLines = wrapLines(tmp, free ? (entry.title || "자유 기록") : q.q, qContentW);
+  tmp.font = qFont; const qLines = wrapWords(tmp, free ? (entry.title || "자유 기록") : q.q, qContentW);
   tmp.font = bFont; const bLines = wrapLines(tmp, (entry.text || "").trim() || "(빈 글)", contentW);
   const qLH = 64, bLH = 64;
   // ── layout ──
@@ -402,7 +423,7 @@ async function drawQuestionCard(arg) {
   // 가운데 — 질문/제목, 오렌지 고딕
   const qFont = "800 54px 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif", qLH = 76;
   const qMaxW = S - (PAD + 28) * 2;
-  ctx.font = qFont; const qLines = wrapLines(ctx, headline, qMaxW);
+  ctx.font = qFont; const qLines = wrapWords(ctx, headline, qMaxW);
   const center = ((230) + (S - 240)) / 2, blockH = (qLines.length - 1) * qLH;
   ctx.fillStyle = "#f3895c"; ctx.font = qFont; ctx.textAlign = "center";
   let y = center - blockH / 2 + 18;
@@ -429,7 +450,7 @@ async function drawDocCanvas(entry) {
   const W = 1240, PAD = 120, contentW = W - PAD * 2;
   const qFont = "800 42px 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif", bFont = "400 34px 'Gowun Batang','Nanum Myeongjo', serif";
   const tmp = document.createElement("canvas").getContext("2d");
-  tmp.font = qFont; const qLines = wrapLines(tmp, free ? (entry.title || "자유 기록") : q.q, contentW);
+  tmp.font = qFont; const qLines = wrapWords(tmp, free ? (entry.title || "자유 기록") : q.q, contentW);
   tmp.font = bFont; const bLines = wrapLines(tmp, (entry.text || "").trim() || "(빈 글)", contentW);
   const qLH = 62, bLH = 58;
   const headTop = 116, ruleY = 188, metaY = 232, qTop = 300;
@@ -617,7 +638,7 @@ const css = `
 .nss-qcard{margin-top:8px; padding:30px 26px; border:1px solid rgba(237,106,53,.5); border-radius:18px; background:linear-gradient(165deg, rgba(237,106,53,.20), rgba(237,106,53,.06)); box-shadow:0 10px 30px rgba(237,106,53,.12);}
 .nss-qmeta{display:flex; align-items:center; gap:10px; font-size:12px; color:var(--ink3); margin-bottom:16px; flex-wrap:wrap;}
 .nss-chip{padding:3px 10px; border-radius:99px; border:1px solid var(--line2); background:var(--paper2); color:var(--ink2);}
-.nss-bigq{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif; font-weight:600; font-size:23px; line-height:1.55; letter-spacing:0; color:#fdf6ea;}
+.nss-bigq{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif; font-weight:600; font-size:23px; line-height:1.55; letter-spacing:0; color:#fdf6ea; word-break:keep-all; overflow-wrap:break-word;}
 .nss-label{display:flex; align-items:center; gap:8px; margin:26px 0 11px; font-size:13px; letter-spacing:.05em; color:var(--ink2);}
 .nss-label .ln{flex:1; height:1px; background:var(--line);}
 .nss-label .cnt{font-size:11.5px; color:var(--ink3); letter-spacing:0;}
