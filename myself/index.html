@@ -311,23 +311,40 @@ function wrapLines(ctx, text, maxW) {
   return out;
 }
 function wrapWords(ctx, text, maxW) {
-  const out = []; const paras = (text || "").split(/\n/);
-  for (const para of paras) {
-    if (para === "") { out.push(""); continue; }
-    const tokens = para.split(" ");
-    let line = "";
+  const out = [];
+  const paras = (text || "").split(/\n/);
+  const measure = (s) => ctx.measureText(s).width;
+  const greedy = (tokens, limit) => {
+    const lines = []; let line = "";
+    for (const w of tokens) { const cand = line ? line + " " + w : w; if (measure(cand) > limit && line) { lines.push(line); line = w; } else line = cand; }
+    if (line) lines.push(line);
+    return lines;
+  };
+  const charBreak = (tokens) => { // 한 어절이 한 줄보다 길 때만 글자 단위 분해
+    const lines = []; let line = "";
     for (const w of tokens) {
       const cand = line ? line + " " + w : w;
-      if (ctx.measureText(cand).width > maxW && line) {
-        out.push(line);
-        if (ctx.measureText(w).width > maxW) { // 한 어절이 너무 길면 그 어절만 글자 단위로
-          let piece = "";
-          for (const ch of w) { const t = piece + ch; if (ctx.measureText(t).width > maxW && piece) { out.push(piece); piece = ch; } else piece = t; }
-          line = piece;
-        } else line = w;
+      if (measure(cand) > maxW && line) {
+        lines.push(line);
+        if (measure(w) > maxW) { let piece = ""; for (const ch of w) { const t = piece + ch; if (measure(t) > maxW && piece) { lines.push(piece); piece = ch; } else piece = t; } line = piece; }
+        else line = w;
       } else line = cand;
     }
-    if (line) out.push(line);
+    if (line) lines.push(line);
+    return lines;
+  };
+  for (const para of paras) {
+    if (para === "") { out.push(""); continue; }
+    const tokens = para.split(" ").filter(Boolean);
+    if (tokens.length === 0) { out.push(""); continue; }
+    let maxWordW = 0; for (const w of tokens) maxWordW = Math.max(maxWordW, measure(w));
+    if (maxWordW > maxW) { for (const l of charBreak(tokens)) out.push(l); continue; }
+    const N = greedy(tokens, maxW).length;
+    if (N <= 1) { out.push(tokens.join(" ")); continue; }
+    // N줄을 유지하면서 가장 긴 줄 폭을 최소화 → 위·아래 줄이 고르게 분산됨
+    let lo = maxWordW, hi = maxW, best = maxW;
+    for (let i = 0; i < 28; i++) { const mid = (lo + hi) / 2; if (greedy(tokens, mid).length <= N) { best = mid; hi = mid; } else lo = mid; }
+    for (const l of greedy(tokens, best)) out.push(l);
   }
   return out;
 }
