@@ -224,7 +224,7 @@ const LS = "nss.";
 const HAS_LS = (() => { try { const t = "__nss_t"; localStorage.setItem(t, "1"); localStorage.removeItem(t); return true; } catch (e) { return false; } })();
 if (HAS_LS) { try { for (let i = 0; i < localStorage.length; i++) { const key = localStorage.key(i); if (key && key.indexOf(LS) === 0) mem.personal[key.slice(LS.length)] = localStorage.getItem(key); } } catch (e) {} }
 
-const SHEET_URL = "PASTE_LOOKBACK_SHEET_URL_HERE"; // ← 배포 시 교체.
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbzzzxnseeHoE4Uk6gafHa0Lu0bjz2ilnMbg2hQ_bIJbhSdU8DXWwCT5nPKG_yiiFCAqmA/exec"; // ← 배포 시 교체.
 const COMMENTS_ENABLED = false;
 const visK = (v) => (v === "public" ? "전체" : v === "private" ? "나만" : "클럽");
 const visFromK = (k) => (k === "전체" ? "public" : k === "나만" ? "private" : "club");
