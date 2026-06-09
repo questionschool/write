@@ -122,7 +122,7 @@
   .gate-seal{width:46px; height:46px; margin:0 auto 14px; border-radius:13px; background:linear-gradient(150deg,var(--coral),var(--coral2)); color:#fff; font-family:var(--serif); font-weight:800; font-size:24px; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(237,106,53,.4);}
   .gate-title{margin:0 0 6px; font-family:var(--gothic); font-weight:900; font-size:19px; color:#fdf6ea;}
   .gate-sub{margin:0 0 18px; font-family:var(--gothic); font-size:13px; line-height:1.6; color:var(--ink3);}
-  .gate-input{width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--line); background:rgba(0,0,0,.22); color:#fdf6ea; font-family:var(--gothic); font-size:16px; text-align:center; letter-spacing:3px; outline:none;}
+  .gate-input{width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--line); background:rgba(0,0,0,.22); color:#fdf6ea; font-family:var(--gothic); font-size:16px; text-align:center; letter-spacing:2px; outline:none;}
   .gate-input:focus{border-color:rgba(237,106,53,.6);}
   .gate-err{min-height:16px; margin:10px 0 0; font-family:var(--gothic); font-size:12.5px; color:var(--coral2);}
   .gate-actions{display:flex; gap:10px; margin-top:16px;}
@@ -147,7 +147,7 @@
     </header>
 
     <div class="shelf">
-      <!-- 나를 쓰는 시간 -->
+      <!-- 나를 쓰는 노트 -->
       <a class="card" href="#" data-gate="myself" data-url="./myself/" data-code="2026" data-book="나를 쓰는 노트">
         <div class="topbar"></div>
         <div class="cover-wrap">
@@ -157,6 +157,20 @@
           <h2 class="booktitle">나를 쓰는 노트</h2>
           <p class="booksub">장예원 작가의 100개의 질문</p>
           <span class="qn">100개의 질문 · 함께 쓰기</span>
+          <span class="go">🔒 입장 코드로 들어가기 →</span>
+        </div>
+      </a>
+
+      <!-- 돌아봄 노트 -->
+      <a class="card" href="#" data-gate="lookback" data-url="./lookback/" data-code="thanks2026" data-book="돌아봄 노트">
+        <div class="topbar"></div>
+        <div class="cover-wrap">
+          <img class="cover" src="./images/cover-lookback.png" alt="돌아봄 노트 — 질문예술학교" loading="lazy" />
+        </div>
+        <div class="meta">
+          <h2 class="booktitle">돌아봄 노트</h2>
+          <p class="booksub">지난 시간의 의미를 발견하는 질문</p>
+          <span class="qn">월간 · 계절 · 반기 · 연간 돌아봄</span>
           <span class="go">🔒 입장 코드로 들어가기 →</span>
         </div>
       </a>
@@ -183,7 +197,7 @@
       질문예술학교 · 함께 쓰는 질문노트<br />
       각 책의 질문은 원작 도서에서 왔습니다. 저자의 글과 함께 읽으면 더 깊어집니다.
       <div class="foot-contact">
-        <a class="foot-btn" href="mailto:thomas@questionschool.net?subject=%5B%EB%82%98%EB%A5%BC%20%EC%93%B0%EB%8A%94%20%EB%85%B8%ED%8A%B8%5D%20%EC%9E%85%EC%9E%A5%20%EC%BD%94%EB%93%9C%20%EB%AC%B8%EC%9D%98">✉️ 입장 코드를 잊으셨나요? 관리자(토마스)에게 문의하기</a>
+        <a class="foot-btn" href="mailto:thomas@questionschool.net?subject=%5B%ED%95%A8%EA%BB%98%20%EC%93%B0%EB%8A%94%20%EC%A7%88%EB%AC%B8%20%EB%85%B8%ED%8A%B8%5D%20%EC%9E%85%EC%9E%A5%20%EC%BD%94%EB%93%9C%20%EB%AC%B8%EC%9D%98">✉️ 입장 코드를 잊으셨나요? 관리자(토마스)에게 문의하기</a>
       </div>
     </footer>
   </div>
@@ -194,7 +208,7 @@
       <div class="gate-seal">作</div>
       <h3 id="gate-title" class="gate-title">입장 코드</h3>
       <p class="gate-sub" id="gate-sub">이 노트는 입장 코드가 필요합니다.</p>
-      <input id="gate-input" class="gate-input" type="password" inputmode="numeric" autocomplete="off" placeholder="입장 코드를 입력하세요" />
+      <input id="gate-input" class="gate-input" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" placeholder="입장 코드를 입력하세요" />
       <p id="gate-err" class="gate-err"></p>
       <div class="gate-actions">
         <button id="gate-cancel" class="gate-btn ghost" type="button">취소</button>
