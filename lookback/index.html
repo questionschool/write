@@ -114,6 +114,8 @@ const QSETS = { month: BASE_Q, season: BASE_Q, half: BASE_Q, year: BASE_Q };
 const totalOf = (pt) => (QSETS[pt] || []).length;
 const Q = (pt, n) => (QSETS[pt] || []).find((x) => x.n === n);
 const fmtQText = (qtext, phrase) => (qtext || "").replace(/\{기간\}/g, phrase || "");
+const REVIEW_EN = { month: "Monthly Review", season: "Seasonal Review", half: "Half-Year Review", year: "Annual Review" };
+const reviewLabel = (pt, year) => "Thanks " + (year || new Date().getFullYear()) + " / " + (REVIEW_EN[pt] || "Review");
 
 /* ===== 기간 자동 결정 =====
    사용자 직관에 맞춘 단순 규칙:
@@ -243,10 +245,25 @@ function sheetLoad() {
   });
 }
 function sheetPost(action, sheet, record) {
+  if (!SHEET_URL || SHEET_URL.indexOf("script.google.com") === -1) {
+    try { console.log("[sheet] skipped — SHEET_URL not configured:", action, sheet); } catch (e) {}
+    return;
+  }
   try {
-    if (!SHEET_URL || SHEET_URL.indexOf("script.google.com") === -1) return;
-    fetch(SHEET_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: action, sheet: sheet, record: record }) }).catch(function () {});
-  } catch (e) {}
+    fetch(SHEET_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: action, sheet: sheet, record: record })
+    }).then(function (r) {
+      return r.text().then(function (t) {
+        try { console.log("[sheet]", action, sheet, "→", r.status, t.slice(0, 200)); } catch (e) {}
+      });
+    }).catch(function (err) {
+      try { console.warn("[sheet] error:", action, sheet, err && err.message); } catch (e) {}
+    });
+  } catch (e) {
+    try { console.warn("[sheet] sync error:", e); } catch (ee) {}
+  }
 }
 
 function parseLookbackQNum(s) {
@@ -408,7 +425,7 @@ async function drawEntryCanvas(entry) {
   if (free) {
     ctx.fillStyle = "#cdd4e8"; ctx.font = "italic 700 23px 'Nanum Myeongjo',serif"; ctx.fillText("Time to look back · '" + entry.pen + "'의 자유 기록", PAD + 88, 100);
   } else {
-    ctx.fillStyle = "#cdd4e8"; ctx.font = "700 23px 'Nanum Myeongjo',serif"; ctx.fillText("돌아봄 질문 " + pad(entry.n) + " / " + (entry.total || 10), PAD + 88, 92);
+    ctx.fillStyle = "#cdd4e8"; ctx.font = "700 23px 'Nanum Myeongjo',serif"; ctx.fillText(entry.reviewLabel || ("Thanks " + new Date().getFullYear()), PAD + 88, 92);
     ctx.fillStyle = "#8b96b6"; ctx.font = "400 20px 'Nanum Myeongjo',serif"; ctx.fillText(entry.periodPhrase || "", PAD + 88, 120);
   }
   ctx.fillStyle = "#f3895c"; ctx.font = qFont; ctx.textAlign = "center"; let y = qTop;
@@ -427,8 +444,8 @@ async function drawEntryCanvas(entry) {
 
   // 하단: 푸터
   ctx.strokeStyle = "rgba(241,234,216,.16)"; ctx.beginPath(); ctx.moveTo(PAD, fDiv); ctx.lineTo(W - PAD, fDiv); ctx.stroke();
-  ctx.textAlign = "center"; ctx.fillStyle = "#ed6a35"; ctx.font = "italic 700 25px 'Nanum Myeongjo',serif";
-  ctx.fillText("잠시 멈춰, 지나온 시간을 천천히 돌아봅니다.", W / 2, fTag);
+  ctx.textAlign = "center"; ctx.fillStyle = "#ed6a35"; ctx.font = "italic 700 23px 'Nanum Myeongjo',serif";
+  ctx.fillText("지나온 시간의 의미를 발견하는 돌아봄의 기록 · lookback note", W / 2, fTag);
   ctx.textAlign = "left";
   return cv;
 }
@@ -472,7 +489,7 @@ async function drawQuestionCard(arg) {
     ctx.fillText("'" + (arg.pen || "") + "'의 자유 기록", S - PAD, S - 92);
   } else {
     ctx.fillStyle = "#cdd4e8"; ctx.font = "700 22px 'Nanum Myeongjo',serif";
-    ctx.fillText("돌아봄 질문 " + pad(arg.n) + " / " + (arg.total || 10), S - PAD, S - 118);
+    ctx.fillText(arg.reviewLabel || ("Thanks " + new Date().getFullYear()), S - PAD, S - 118);
     ctx.fillStyle = "#8b96b6"; ctx.font = "400 21px 'Nanum Myeongjo',serif";
     ctx.fillText("「돌아봄 노트」", S - PAD, S - 86);
   }
@@ -507,7 +524,7 @@ async function drawDocCanvas(entry) {
   ctx.fillStyle = "#9a9a9a"; ctx.font = "400 20px 'Nanum Myeongjo',serif"; ctx.textAlign = "right"; ctx.fillText(fmtDateK(entry.ts) + " · " + entry.pen, W - PAD, headTop); ctx.textAlign = "left";
   ctx.strokeStyle = "#e4e4e4"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(PAD, ruleY); ctx.lineTo(W - PAD, ruleY); ctx.stroke();
   ctx.fillStyle = "#b0673a"; ctx.font = "700 21px 'Nanum Myeongjo',serif";
-  ctx.fillText(free ? "Time to look back · 자유 기록" : ("돌아봄 질문 " + pad(entry.n) + " · " + (entry.periodPhrase || "")), PAD, metaY);
+  ctx.fillText(free ? "Time to look back · 자유 기록" : ((entry.reviewLabel || "Thanks " + new Date().getFullYear()) + " · " + (entry.periodPhrase || "")), PAD, metaY);
   ctx.fillStyle = "#0a2543"; ctx.font = qFont; let y = qTop;
   for (const ln of qLines) { ctx.fillText(ln, PAD, y); y += qLH; }
   ctx.fillStyle = "#c85a2c"; ctx.font = "700 22px 'Nanum Myeongjo',serif"; ctx.fillText(entry.pen + "의 돌아봄", PAD, aLabelY);
@@ -515,7 +532,7 @@ async function drawDocCanvas(entry) {
   for (const ln of bLines) { ctx.fillText(ln, PAD, y); y += bLH; }
   ctx.strokeStyle = "#e4e4e4"; ctx.beginPath(); ctx.moveTo(PAD, fRule); ctx.lineTo(W - PAD, fRule); ctx.stroke();
   ctx.fillStyle = "#8a8a8a"; ctx.font = "400 20px 'Nanum Myeongjo',serif"; ctx.fillText("「돌아봄 노트」 · 질문예술학교", PAD, fTop);
-  ctx.fillStyle = "#c85a2c"; ctx.font = "italic 700 22px 'Nanum Myeongjo',serif"; ctx.fillText("잠시 멈춰, 지나온 시간을 천천히 돌아봅니다.", PAD, fTop + 38);
+  ctx.fillStyle = "#c85a2c"; ctx.font = "italic 700 20px 'Nanum Myeongjo',serif"; ctx.fillText("지나온 시간의 의미를 발견하는 돌아봄의 기록 · lookback note", PAD, fTop + 38);
   return cv;
 }
 
@@ -783,7 +800,14 @@ function App() {
       if (s.role === "admin") setAdminUnlocked(true);
       await refreshAnswered();
       const lastAp = await pGet(SKEY);
-      if (lastAp && lastAp.pt && lastAp.pk && lastAp.label) setActivePeriod(lastAp);
+      if (lastAp && lastAp.pt && lastAp.pk) {
+        const opts = periodOptions(lastAp.pt);
+        const fnd = opts.find((o) => o.key === lastAp.pk);
+        const phrase = fnd ? fnd.phrase : (lastAp.phrase || lastAp.pk);
+        const label = fnd ? fnd.label : (lastAp.label || lastAp.pk);
+        const year = fnd ? fnd.year : (parseInt(lastAp.pk, 10) || new Date().getFullYear());
+        setActivePeriod({ pt: lastAp.pt, pk: lastAp.pk, label, phrase, year });
+      }
     }
     setBoot(true);
   })(); /* eslint-disable-next-line */ }, []);
@@ -837,7 +861,7 @@ function App() {
     if (!pickPt || !pickKey) return;
     const opts = periodOptions(pickPt);
     const chosen = opts.find((o) => o.key === pickKey) || opts[0];
-    const ap = { pt: pickPt, pk: chosen.key, label: chosen.label, phrase: chosen.phrase };
+    const ap = { pt: pickPt, pk: chosen.key, label: chosen.label, phrase: chosen.phrase, year: chosen.year };
     await pSet(SKEY, ap); setActivePeriod(ap);
     const total = totalOf(pickPt); let nextN = 1;
     for (let n = 1; n <= total; n++) { if (!myAnswered.has(pickPt + ":" + ap.pk + ":" + pad(n))) { nextN = n; break; } if (n === total) nextN = 1; }
@@ -944,8 +968,9 @@ function App() {
       const opts = periodOptions(pt);
       const found = opts.find((o) => o.key === pk);
       const label = found ? found.label : pk; const phrase = found ? found.phrase : pk;
+      const yr = found ? found.year : (parseInt(pk, 10) || new Date().getFullYear());
       const sk = pt + ":" + pk;
-      if (!sessions[sk]) sessions[sk] = { sk, pt, pk, label, phrase, items: [], latest: 0 };
+      if (!sessions[sk]) sessions[sk] = { sk, pt, pk, label, phrase, year: yr, items: [], latest: 0 };
       const qObj = Q(pt, n);
       sessions[sk].items.push({ n, theme: qObj ? qObj.theme : "", q: qObj ? fmtQText(qObj.q, phrase) : "", text: e.text, ts: e.ts || 0, vis: e.vis || "club" });
       sessions[sk].latest = Math.max(sessions[sk].latest, e.ts || 0);
@@ -1077,8 +1102,10 @@ function App() {
       const pk = after.slice(0, i2); const n = parseInt(after.slice(i2 + 1), 10);
       const e = await pGet(k); if (!e || !(e.text || "").trim()) continue;
       const opts = periodOptions(pt); const found = opts.find((o) => o.key === pk);
-      const phrase = found ? found.phrase : pk; const qObj = Q(pt, n);
-      rows.push({ ts: e.ts || 0, dl: { pen: me.pen, pt, pk, n, q: qObj ? fmtQText(qObj.q, phrase) : "", periodPhrase: phrase, text: e.text, ts: e.ts, total: totalOf(pt) } });
+      const phrase = found ? found.phrase : pk;
+      const yr = found ? found.year : (parseInt(pk, 10) || new Date().getFullYear());
+      const qObj = Q(pt, n);
+      rows.push({ ts: e.ts || 0, dl: { pen: me.pen, pt, pk, n, q: qObj ? fmtQText(qObj.q, phrase) : "", periodPhrase: phrase, reviewLabel: reviewLabel(pt, yr), text: e.text, ts: e.ts, total: totalOf(pt) } });
     }
     for (const k of await pList("freemine:")) { const pid = k.split(":")[1]; const e = await pGet(k); if (e && e.text && e.text.trim()) rows.push({ ts: e.ts || 0, dl: { free: true, title: e.title || "", text: e.text, ts: e.ts, pen: me.pen } }); }
     rows.sort((a, b) => (b.ts || 0) - (a.ts || 0));
@@ -1218,7 +1245,7 @@ function App() {
         <div className="nss-qcard" style={{ marginTop: 14 }}>
           <div className="nss-qmeta">
             <span className="nss-chip">{active.theme}</span>
-            <span>돌아봄 질문 {pad(active.n)} / {total}</span>
+            <span className="nss-chip">{reviewLabel(activePeriod.pt, activePeriod.year || new Date().getFullYear())}</span>
             <span className="nss-tag aq">{activePeriod.phrase}</span>
           </div>
           <div className="nss-bigq">{qText}</div>
@@ -1228,7 +1255,7 @@ function App() {
             {activeN > 1 && <button className="nss-btn nss-actbtn nss-tap" onClick={goPrevN}><ChevronLeft size={13} /> 이전 질문</button>}
             <button className="nss-btn nss-actbtn nss-tap" onClick={goNextN}>{activeN >= total ? "마치고 모아보기" : "건너뛰기"} <ChevronRight size={13} /></button>
           </div>
-          <button className="nss-btn nss-actbtn nss-tap" onClick={() => saveQuestionImage({ pt: activePeriod.pt, pk: activePeriod.pk, n: active.n, q: qText, periodPhrase: activePeriod.phrase, total })}><Download size={13} /> 질문 카드 저장</button>
+          <button className="nss-btn nss-actbtn nss-tap" onClick={() => saveQuestionImage({ pt: activePeriod.pt, pk: activePeriod.pk, n: active.n, q: qText, periodPhrase: activePeriod.phrase, reviewLabel: reviewLabel(activePeriod.pt, activePeriod.year || new Date().getFullYear()), total })}><Download size={13} /> 질문 카드 저장</button>
         </div>
         <div className="nss-label"><PenLine size={15} /> {me.pen}의 돌아봄 <span className="ln" /></div>
         <div className="nss-vis">{Object.entries(VIS).map(([k, v]) => { const Ico = v.Icon; return (<button key={k} className={"nss-btn nss-visbtn nss-tap" + (visDraft === k ? " on" : "")} onClick={() => setVisDraft(k)}><Ico size={13} /> {v.label}</button>); })}</div>
@@ -1257,7 +1284,7 @@ function App() {
     const isPub = !isMe && entry.vis === "public";
     const canDownload = isMe || me.role === "admin";
     const qText = fmtQ(active.q);
-    const dlEntry = { pen, pt: activePeriod.pt, pk: activePeriod.pk, n: active.n, q: qText, periodPhrase: activePeriod.phrase, text, ts, total: totalOf(activePeriod.pt) };
+    const dlEntry = { pen, pt: activePeriod.pt, pk: activePeriod.pk, n: active.n, q: qText, periodPhrase: activePeriod.phrase, reviewLabel: reviewLabel(activePeriod.pt, activePeriod.year || new Date().getFullYear()), text, ts, total: totalOf(activePeriod.pt) };
     return (
       <div className={"nss-peer" + (isMe ? " me" : "")} key={uid}>
         <div className="nss-peerhead"><span className="nss-ava">{(pen || "?").slice(0, 1)}</span><span className="nss-peerpen">{pen}{isMe ? " (나)" : ""}</span>{isPub && <span className="nss-tag pub"><Globe size={10} /> 전체</span>}<span className="nss-peertime">{relTime(ts)}</span></div>
@@ -1277,10 +1304,10 @@ function App() {
       <div className="nss-fade">
         <button className="nss-btn nss-back" onClick={() => { setView("write"); window.scrollTo(0, 0); }}><ChevronLeft size={16} /> 나의 글로 돌아가기</button>
         <div className="nss-qcard" style={{ padding: "22px 24px", marginTop: 8 }}>
-          <div className="nss-qmeta"><span className="nss-chip">{active.theme}</span><span>돌아봄 질문 {pad(active.n)} / {total}</span><span className="nss-tag aq">{activePeriod.phrase}</span></div>
+          <div className="nss-qmeta"><span className="nss-chip">{active.theme}</span><span className="nss-chip">{reviewLabel(activePeriod.pt, activePeriod.year || new Date().getFullYear())}</span><span className="nss-tag aq">{activePeriod.phrase}</span></div>
           <div className="nss-bigq" style={{ fontSize: 19 }}>{qText}</div>
         </div>
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 9 }}><button className="nss-btn nss-actbtn nss-tap" onClick={() => saveQuestionImage({ pt: activePeriod.pt, pk: activePeriod.pk, n: active.n, q: qText, periodPhrase: activePeriod.phrase, total })}><Download size={13} /> 질문 카드 저장</button></div>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 9 }}><button className="nss-btn nss-actbtn nss-tap" onClick={() => saveQuestionImage({ pt: activePeriod.pt, pk: activePeriod.pk, n: active.n, q: qText, periodPhrase: activePeriod.phrase, reviewLabel: reviewLabel(activePeriod.pt, activePeriod.year || new Date().getFullYear()), total })}><Download size={13} /> 질문 카드 저장</button></div>
         <div className="nss-label"><Users size={15} /> 글 모음 {!isPrivate && <span className="cnt">나 + {peers.length}명</span>}<span className="ln" />{!isPrivate && <button className="nss-btn nss-refresh nss-tap" onClick={() => loadRoom()}><RefreshCw size={12} /> 새로고침</button>}</div>
         {myEntry && renderEntryCard(myEntry, true)}
         {isPrivate ? (
@@ -1312,7 +1339,7 @@ function App() {
           return (
             <button className="nss-btn nss-feed nss-tap" key={r.id} onClick={async () => {
               const opts2 = periodOptions(r.pt); const f = opts2.find((o) => o.key === r.pk);
-              const ap = { pt: r.pt, pk: r.pk, label: f ? f.label : r.pk, phrase };
+              const ap = { pt: r.pt, pk: r.pk, label: f ? f.label : r.pk, phrase, year: f ? f.year : new Date().getFullYear() };
               await pSet(SKEY, ap); setActivePeriod(ap); setActiveN(r.n); setView("write"); window.scrollTo(0, 0);
               const e = await pGet("mineL:" + r.pt + ":" + r.pk + ":" + pad(r.n));
               setDraft(e && e.text ? e.text : ""); setVisDraft(e && e.vis ? e.vis : "club");
@@ -1411,7 +1438,7 @@ function App() {
                     <span className="cnt">{s.items.length} / {total}</span>
                     <span className="ln" />
                     <button className="nss-btn nss-refresh nss-tap" onClick={async () => {
-                      const ap = { pt: s.pt, pk: s.pk, label: s.label, phrase: s.phrase };
+                      const ap = { pt: s.pt, pk: s.pk, label: s.label, phrase: s.phrase, year: s.year };
                       await pSet(SKEY, ap); setActivePeriod(ap);
                       const nxt = s.items.length < total ? (s.items.map(it => it.n).reduce((a,b)=>Math.max(a,b),0) + 1) : s.items[0].n;
                       setActiveN(Math.min(nxt, total)); setView("write"); window.scrollTo(0,0);
@@ -1420,7 +1447,7 @@ function App() {
                     }}><PenLine size={12} /> 이 회고 이어 쓰기</button>
                   </div>
                   {s.items.map((it) => {
-                    const dl = { pen: me.pen, pt: s.pt, pk: s.pk, n: it.n, q: it.q, periodPhrase: s.phrase, text: it.text, ts: it.ts, total };
+                    const dl = { pen: me.pen, pt: s.pt, pk: s.pk, n: it.n, q: it.q, periodPhrase: s.phrase, reviewLabel: reviewLabel(s.pt, s.year), text: it.text, ts: it.ts, total };
                     const V = VIS[it.vis] || VIS.club; const Ico = V.Icon;
                     return (
                       <div className="nss-libcard nss-fade" key={s.sk + "-" + it.n}>
@@ -1431,14 +1458,14 @@ function App() {
                           <button className="nss-btn nss-actbtn nss-tap" onClick={() => savePDF(dl)}><FileText size={13} /> PDF</button>
                           <CopyBtn head={it.q || ""} text={it.text} label="글 복사" />
                           <button className="nss-btn nss-actbtn nss-tap" onClick={async () => {
-                            const ap = { pt: s.pt, pk: s.pk, label: s.label, phrase: s.phrase };
+                            const ap = { pt: s.pt, pk: s.pk, label: s.label, phrase: s.phrase, year: s.year };
                             await pSet(SKEY, ap); setActivePeriod(ap); setActiveN(it.n); setView("write"); window.scrollTo(0,0);
                             const e = await pGet("mineL:" + s.pt + ":" + s.pk + ":" + pad(it.n));
                             setDraft(e && e.text ? e.text : ""); setVisDraft(e && e.vis ? e.vis : "club");
                           }}><PenLine size={13} /> 수정</button>
                           <button className="nss-btn nss-actbtn nss-tap" onClick={async () => { if (await deleteEntry(s.pt, s.pk, it.n)) loadLibrary(); }}><Trash2 size={13} /> 삭제</button>
                         </div>
-                        <div className="nss-libmeta"><span className="nss-chip">{it.theme}</span><span className="nss-chip">돌아봄 질문 {pad(it.n)}</span><span className="nss-tag"><Ico size={10} /> {V.label}</span><span>{it.ts ? relTime(it.ts) : ""}</span></div>
+                        <div className="nss-libmeta"><span className="nss-chip">{it.theme}</span><span className="nss-chip">Q{pad(it.n)}</span><span className="nss-tag"><Ico size={10} /> {V.label}</span><span>{it.ts ? relTime(it.ts) : ""}</span></div>
                       </div>
                     );
                   })}
