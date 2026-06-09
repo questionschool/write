@@ -10,13 +10,13 @@
 <meta property="og:url" content="https://write.questionschool.net/lookback/" />
 <meta property="og:title" content="돌아봄 노트" />
 <meta property="og:description" content="잠시 멈춰, 지나온 시간을 천천히 돌아봅니다" />
-<meta property="og:image" content="https://write.questionschool.net/images/cover-lookback.jpg" />
-<meta property="og:image:width" content="500" />
-<meta property="og:image:height" content="715" />
+<meta property="og:image" content="https://write.questionschool.net/images/og-lookback.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="돌아봄 노트" />
 <meta name="twitter:description" content="잠시 멈춰, 지나온 시간을 천천히 돌아봅니다" />
-<meta name="twitter:image" content="https://write.questionschool.net/images/cover-lookback.jpg" />
+<meta name="twitter:image" content="https://write.questionschool.net/images/og-lookback.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <style>
@@ -99,15 +99,15 @@ const PERIOD_BY_ID = Object.fromEntries(PERIODS.map((p) => [p.id, p]));
 
 /* 질문 (일단 4개 기간 모두 같은 10문항. 연간은 나중에 별도 배열로 교체 가능) */
 const BASE_Q = [
-  { n: 1,  theme: "관심·좋아함",     q: "지난 {기간}, 새롭게 관심을 가지게 된 것이나 시간 가는 줄 모르고 좋아한 것이 있었나요?" },
-  { n: 2,  theme: "인상 깊은 콘텐츠", q: "지난 {기간}, 보고 듣고 읽은 것 중 마음에 오래 남은 콘텐츠가 있나요? 어떤 점이 인상 깊었나요?" },
-  { n: 3,  theme: "일상의 행복",     q: "지난 {기간}, 일상에서 작지만 또렷한 편안함이나 행복을 느꼈던 순간은 언제였나요?" },
-  { n: 4,  theme: "기억에 남는 소비", q: "지난 {기간}, 기억에 남는 지출이 있나요? 만족스러웠던 소비와 줄이고 싶은 소비를 함께 떠올려 보세요." },
-  { n: 5,  theme: "자기 칭찬",       q: "지난 {기간}, 스스로 칭찬하거나 격려해 주고 싶은 순간이 있었나요? 별것 아닌 것 같아도 좋습니다." },
-  { n: 6,  theme: "힘들었던 순간",   q: "지난 {기간}, 마음을 힘들게 했던 일이나 사건이 있었나요? 그때 무엇을 느꼈는지 천천히 적어 보세요." },
-  { n: 7,  theme: "일·역할",         q: "지난 {기간}, 당신이 맡았던 일과 역할을 돌아볼 때 뿌듯했던 일과 아쉬웠던 일은 무엇이었나요?" },
-  { n: 8,  theme: "관계",            q: "지난 {기간}, 가까이 머물렀던 사람들은 누구였나요? 그들에게서 어떤 영향을 받았는지 떠올려 보세요." },
-  { n: 9,  theme: "몸과 마음",       q: "지난 {기간}, 당신의 몸과 마음은 어떤 상태였나요? 자신을 챙기고 보살폈던 순간이 있다면 함께 적어 보세요." },
+  { n: 1,  theme: "관심·좋아함",     q: "{기간}, 새롭게 관심을 가지게 된 것이나 시간 가는 줄 모르고 좋아한 것이 있었나요?" },
+  { n: 2,  theme: "인상 깊은 콘텐츠", q: "{기간}, 보고 듣고 읽은 것 중 마음에 오래 남은 콘텐츠가 있나요? 어떤 점이 인상 깊었나요?" },
+  { n: 3,  theme: "일상의 행복",     q: "{기간}, 일상에서 작지만 또렷한 편안함이나 행복을 느꼈던 순간은 언제였나요?" },
+  { n: 4,  theme: "기억에 남는 소비", q: "{기간}, 기억에 남는 지출이 있나요? 만족스러웠던 소비와 줄이고 싶은 소비를 함께 떠올려 보세요." },
+  { n: 5,  theme: "자기 칭찬",       q: "{기간}, 스스로 칭찬하거나 격려해 주고 싶은 순간이 있었나요? 별것 아닌 것 같아도 좋습니다." },
+  { n: 6,  theme: "힘들었던 순간",   q: "{기간}, 마음을 힘들게 했던 일이나 사건이 있었나요? 그때 무엇을 느꼈는지 천천히 적어 보세요." },
+  { n: 7,  theme: "일·역할",         q: "{기간}, 당신이 맡았던 일과 역할을 돌아볼 때 뿌듯했던 일과 아쉬웠던 일은 무엇이었나요?" },
+  { n: 8,  theme: "관계",            q: "{기간}, 가까이 머물렀던 사람들은 누구였나요? 그들에게서 어떤 영향을 받았는지 떠올려 보세요." },
+  { n: 9,  theme: "몸과 마음",       q: "{기간}, 당신의 몸과 마음은 어떤 상태였나요? 자신을 챙기고 보살폈던 순간이 있다면 함께 적어 보세요." },
   { n: 10, theme: "키워드 셋",       q: "지금까지 쓴 답들을 다시 읽어 보고, 이 시간을 관통하는 세 개의 키워드를 골라 보세요. 그 키워드를 고른 이유도 함께 적어 주세요." },
 ];
 const QSETS = { month: BASE_Q, season: BASE_Q, half: BASE_Q, year: BASE_Q };
@@ -115,14 +115,20 @@ const totalOf = (pt) => (QSETS[pt] || []).length;
 const Q = (pt, n) => (QSETS[pt] || []).find((x) => x.n === n);
 const fmtQText = (qtext, phrase) => (qtext || "").replace(/\{기간\}/g, phrase || "");
 
-/* ===== 기간 자동 결정 ===== */
+/* ===== 기간 자동 결정 =====
+   사용자 직관에 맞춘 단순 규칙:
+   - month : 항상 직전 달 (m-1)
+   - season: 가장 최근에 끝난 계절
+   - half  : 6~11월 → 올해 상반기 / 12월 → 올해 하반기 / 1~5월 → 작년 하반기
+   - year  : 1월만 작년 / 나머지는 올해
+   ※ phrase는 질문 본문에 그대로 들어가는 표현 (질문 텍스트에서 "지난 " 접두는 제거됨)
+*/
 function autoPeriod(pt, now) {
   now = now || new Date();
-  const y = now.getFullYear(), m = now.getMonth() + 1, d = now.getDate();
+  const y = now.getFullYear(), m = now.getMonth() + 1;
   if (pt === "month") {
-    let tm, ty = y;
-    if (d <= 20) { tm = m - 2; } else { tm = m - 1; }
-    while (tm < 1) { tm += 12; ty -= 1; }
+    let tm = m - 1, ty = y;
+    if (tm < 1) { tm += 12; ty -= 1; }
     return { key: ty + "-" + String(tm).padStart(2, "0"), label: tm + "월", phrase: "지난 " + tm + "월", year: ty };
   }
   if (pt === "season") {
@@ -134,12 +140,13 @@ function autoPeriod(pt, now) {
     return { key: ny + "-" + name, label: name, phrase: "지난 " + name, year: ny };
   }
   if (pt === "half") {
-    if (m >= 7) return { key: y + "-상반기", label: "상반기", phrase: "지난 상반기", year: y };
-    return { key: (y - 1) + "-하반기", label: "하반기", phrase: "지난 하반기", year: y - 1 };
+    if (m === 12) return { key: y + "-하반기",     label: "하반기", phrase: y + "년 하반기",     year: y };
+    if (m <= 5)   return { key: (y - 1) + "-하반기", label: "하반기", phrase: (y - 1) + "년 하반기", year: y - 1 };
+    return         { key: y + "-상반기",           label: "상반기", phrase: y + "년 상반기",     year: y };
   }
   if (pt === "year") {
-    const yn = (m === 12 ? y : y - 1);
-    return { key: String(yn), label: yn + "년", phrase: yn + "년", year: yn };
+    if (m === 1) return { key: String(y - 1), label: (y - 1) + "년", phrase: (y - 1) + "년", year: y - 1 };
+    return       { key: String(y),         label: y + "년",       phrase: y + "년",       year: y };
   }
   return { key: "", label: "", phrase: "" };
 }
@@ -165,9 +172,9 @@ function periodOptions(pt, now) {
   } else if (pt === "half") {
     let parts = cur.key.split("-"); let yy = parseInt(parts[0], 10); let isFirst = parts[1] === "상반기";
     for (let i = 0; i < 5; i++) {
-      if (isFirst) { isFirst = false; } else { isFirst = true; yy -= 1; }
+      if (isFirst) { yy -= 1; isFirst = false; } else { isFirst = true; }
       const nm = isFirst ? "상반기" : "하반기";
-      opts.push({ key: yy + "-" + nm, label: nm, phrase: "지난 " + nm + " (" + yy + "년)", year: yy });
+      opts.push({ key: yy + "-" + nm, label: nm, phrase: yy + "년 " + nm, year: yy });
     }
   } else if (pt === "year") {
     let yy = parseInt(cur.key, 10);
@@ -215,7 +222,7 @@ const LS = "nss.";
 const HAS_LS = (() => { try { const t = "__nss_t"; localStorage.setItem(t, "1"); localStorage.removeItem(t); return true; } catch (e) { return false; } })();
 if (HAS_LS) { try { for (let i = 0; i < localStorage.length; i++) { const key = localStorage.key(i); if (key && key.indexOf(LS) === 0) mem.personal[key.slice(LS.length)] = localStorage.getItem(key); } } catch (e) {} }
 
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzzzxnseeHoE4Uk6gafHa0Lu0bjz2ilnMbg2hQ_bIJbhSdU8DXWwCT5nPKG_yiiFCAqmA/exec"; // ← 배포 시 교체.
+const SHEET_URL = "PASTE_LOOKBACK_SHEET_URL_HERE"; // ← 배포 시 교체.
 const COMMENTS_ENABLED = false;
 const visK = (v) => (v === "public" ? "전체" : v === "private" ? "나만" : "클럽");
 const visFromK = (k) => (k === "전체" ? "public" : k === "나만" ? "private" : "club");
